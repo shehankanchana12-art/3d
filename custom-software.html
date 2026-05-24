@@ -50,63 +50,68 @@ footer{position:relative;z-index:1;padding:34px 3rem;border-top:1px solid var(--
 body:not(.sv-loaded){overflow:hidden;}
 .sv-loader{
   position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(circle at 50% 42%,rgba(0,229,255,.13),rgba(13,71,232,.08) 34%,rgba(2,11,24,.98) 72%);
-  transition:opacity .75s ease,visibility .75s ease;overflow:hidden;
+  background:#020b18;color:#fff;transition:opacity .6s ease,visibility .6s ease;
 }
 .sv-loader.hide{opacity:0;visibility:hidden;pointer-events:none;}
-.sv-loader:before,.sv-loader:after{
-  content:'';position:absolute;inset:-20%;background:
-  linear-gradient(rgba(0,229,255,.04) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(0,229,255,.04) 1px,transparent 1px);
-  background-size:56px 56px;transform:perspective(600px) rotateX(62deg) translateY(16%);
-  animation:loaderGrid 3s linear infinite;
+.sv-loader:before{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(rgba(0,229,255,.08) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,255,.08) 1px,transparent 1px);
+  background-size:48px 48px;opacity:.45;animation:loaderGrid 5s linear infinite;
 }
-.sv-loader:after{background-size:112px 112px;opacity:.45;animation-duration:5s;animation-direction:reverse;}
-.sv-load-core{position:relative;width:min(72vw,440px);aspect-ratio:1;display:grid;place-items:center;}
-.sv-load-ring{position:absolute;border:1px solid rgba(0,229,255,.28);border-radius:50%;box-shadow:0 0 28px rgba(0,229,255,.12),inset 0 0 28px rgba(0,229,255,.08);}
-.sv-load-ring.r1{inset:7%;animation:loaderSpin 4.5s linear infinite;}
-.sv-load-ring.r2{inset:18%;border-color:rgba(57,255,20,.28);animation:loaderSpin 3.2s linear infinite reverse;}
-.sv-load-ring.r3{inset:29%;border-style:dashed;animation:loaderSpin 7s linear infinite;}
-.sv-load-orb{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--cyan,#00e5ff);box-shadow:0 0 22px var(--cyan,#00e5ff);}
-.sv-load-orb.o1{animation:loaderOrbit 2.6s linear infinite;transform-origin:0 145px;}
-.sv-load-orb.o2{background:var(--green,#39ff14);box-shadow:0 0 22px var(--green,#39ff14);animation:loaderOrbit 3.4s linear infinite reverse;transform-origin:0 105px;}
-.sv-load-orb.o3{width:10px;height:10px;animation:loaderOrbit 4.2s linear infinite;transform-origin:0 72px;}
+.sv-loader:after{
+  content:'';position:absolute;left:0;right:0;top:0;height:4px;
+  background:linear-gradient(90deg,transparent,#00e5ff,#39ff14,#00e5ff,transparent);
+  box-shadow:0 0 24px rgba(0,229,255,.9);animation:loaderScan 1.7s ease-in-out infinite;
+}
+.sv-load-box{
+  position:relative;width:min(88vw,560px);padding:2.4rem 2rem 2rem;text-align:center;
+  border:2px solid #00e5ff;background:rgba(2,11,24,.92);
+  box-shadow:0 0 0 1px rgba(0,229,255,.25),0 0 55px rgba(0,229,255,.35),inset 0 0 35px rgba(0,229,255,.08);
+}
 .sv-load-logo{
-  position:relative;width:126px;height:126px;border:1.5px solid var(--cyan,#00e5ff);display:grid;place-items:center;
-  font-family:'Orbitron',monospace;font-weight:900;font-size:2.1rem;color:#fff;letter-spacing:.08em;
-  background:rgba(0,229,255,.08);box-shadow:0 0 40px rgba(0,229,255,.32),inset 0 0 35px rgba(0,229,255,.1);
-  transform:rotate(45deg);animation:loaderLogo 1.8s ease-in-out infinite;
+  width:150px;height:150px;margin:0 auto 1.5rem;display:grid;place-items:center;
+  border:3px solid #00e5ff;background:rgba(0,229,255,.12);
+  box-shadow:0 0 35px rgba(0,229,255,.75),inset 0 0 28px rgba(0,229,255,.25);
+  font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;letter-spacing:.06em;color:#fff;
+  animation:loaderPulse 1.25s ease-in-out infinite;
 }
-.sv-load-logo span{transform:rotate(-45deg);text-shadow:0 0 18px rgba(0,229,255,.85);}
-.sv-load-panel{position:absolute;left:50%;bottom:4%;width:min(88vw,520px);transform:translateX(-50%);text-align:center;}
-.sv-load-title{font-family:'Orbitron',monospace;font-weight:900;font-size:clamp(1rem,3vw,1.45rem);letter-spacing:.24em;text-transform:uppercase;color:#fff;margin-bottom:.75rem;}
-.sv-load-title span{color:var(--cyan,#00e5ff);}
-.sv-load-text{min-height:1.3rem;color:var(--mid,#8ab4d4);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:1rem;}
-.sv-load-bar{height:4px;border:1px solid rgba(0,229,255,.35);background:rgba(0,229,255,.07);overflow:hidden;}
-.sv-load-progress{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan,#00e5ff),var(--green,#39ff14),var(--cyan,#00e5ff));box-shadow:0 0 18px rgba(0,229,255,.8);transition:width .18s ease;}
-@keyframes loaderGrid{from{background-position:0 0,0 0}to{background-position:0 56px,56px 0}}
-@keyframes loaderSpin{to{transform:rotate(360deg)}}
-@keyframes loaderOrbit{from{transform:rotate(0deg) translateX(1px)}to{transform:rotate(360deg) translateX(1px)}}
-@keyframes loaderLogo{0%,100%{transform:rotate(45deg) scale(.96)}50%{transform:rotate(45deg) scale(1.04)}}
-@media (prefers-reduced-motion:reduce){.sv-loader *{animation:none!important;transition:none!important;}}
+.sv-load-title{
+  font-family:'Orbitron',monospace;font-weight:900;font-size:clamp(1.25rem,4vw,2rem);
+  letter-spacing:.16em;text-transform:uppercase;margin-bottom:.7rem;color:#fff;
+}
+.sv-load-title span{color:#00e5ff;text-shadow:0 0 18px rgba(0,229,255,.9);}
+.sv-load-text{
+  min-height:1.4rem;color:#b8e8ff;font-size:.86rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1.25rem;
+}
+.sv-load-bar{
+  height:16px;border:2px solid rgba(0,229,255,.8);background:rgba(0,229,255,.08);padding:3px;overflow:hidden;
+}
+.sv-load-progress{
+  display:block;height:100%;width:0;background:linear-gradient(90deg,#00e5ff,#39ff14);
+  box-shadow:0 0 18px rgba(57,255,20,.7);transition:width .18s ease;
+}
+.sv-load-percent{
+  margin-top:.75rem;font-family:'Orbitron',monospace;color:#00e5ff;font-size:.85rem;letter-spacing:.18em;
+}
+@keyframes loaderGrid{from{background-position:0 0,0 0}to{background-position:48px 48px,48px 0}}
+@keyframes loaderScan{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(100vh);opacity:1}}
+@keyframes loaderPulse{0%,100%{transform:scale(1);box-shadow:0 0 35px rgba(0,229,255,.75),inset 0 0 28px rgba(0,229,255,.25)}50%{transform:scale(1.06);box-shadow:0 0 60px rgba(57,255,20,.65),inset 0 0 34px rgba(0,229,255,.35)}}
+@media (max-width:600px){.sv-load-box{padding:2rem 1.2rem 1.6rem}.sv-load-logo{width:118px;height:118px;font-size:2.35rem}.sv-load-title{letter-spacing:.1em}}
+@media (prefers-reduced-motion:reduce){.sv-loader *,.sv-loader:before,.sv-loader:after{animation:none!important;transition:none!important;}}
 </style>
 </head>
 <body data-sim="custom">
 <div class="sv-loader" id="svLoader" aria-label="Loading SoftVision experience">
-  <div class="sv-load-core">
-    <div class="sv-load-ring r1"></div>
-    <div class="sv-load-ring r2"></div>
-    <div class="sv-load-ring r3"></div>
-    <div class="sv-load-orb o1"></div>
-    <div class="sv-load-orb o2"></div>
-    <div class="sv-load-orb o3"></div>
-    <div class="sv-load-logo"><span>SV</span></div>
-  </div>
-  <div class="sv-load-panel">
-    <div class="sv-load-title">Soft<span>Vision</span> Boot Sequence</div>
-    <div class="sv-load-text" id="svLoadText">Initializing interface</div>
+  <div class="sv-load-box">
+    <div class="sv-load-logo">SV</div>
+    <div class="sv-load-title">Soft<span>Vision</span></div>
+    <div class="sv-load-text" id="svLoadText">Starting system</div>
     <div class="sv-load-bar"><span class="sv-load-progress" id="svLoadProgress"></span></div>
+    <div class="sv-load-percent" id="svLoadPercent">0%</div>
   </div>
+</div>
 </div>
 <div id="cursor"></div><div id="cursor-ring"></div><canvas id="bg-canvas"></canvas>
 <nav>
@@ -223,28 +228,30 @@ t++;requestAnimationFrame(drawSim)}drawSim();
   if(!loader){document.body.classList.add('sv-loaded');return;}
   const bar=document.getElementById('svLoadProgress');
   const text=document.getElementById('svLoadText');
-  const steps=['Initializing interface','Syncing 3D simulation','Calibrating neon grid','Loading business modules','Launching experience'];
+  const percent=document.getElementById('svLoadPercent');
+  const steps=['Starting system','Loading page assets','Preparing animations','Opening dashboard'];
   const start=performance.now();
-  const minTime=1250;
-  let target=0;
+  const minTime=1100;
   const tick=()=>{
     const elapsed=performance.now()-start;
-    target=Math.min(96,elapsed/minTime*100);
-    if(bar)bar.style.width=target+'%';
-    if(text)text.textContent=steps[Math.min(steps.length-1,Math.floor(target/22))];
-    if(target<96)requestAnimationFrame(tick);
+    const value=Math.min(96,Math.floor(elapsed/minTime*100));
+    if(bar)bar.style.width=value+'%';
+    if(percent)percent.textContent=value+'%';
+    if(text)text.textContent=steps[Math.min(steps.length-1,Math.floor(value/28))];
+    if(value<96)requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
   const done=()=>{
     const wait=Math.max(0,minTime-(performance.now()-start));
     setTimeout(()=>{
       if(bar)bar.style.width='100%';
-      if(text)text.textContent='Experience ready';
+      if(percent)percent.textContent='100%';
+      if(text)text.textContent='Ready';
       setTimeout(()=>{
         loader.classList.add('hide');
         document.body.classList.add('sv-loaded');
-        setTimeout(()=>loader.remove(),800);
-      },260);
+        setTimeout(()=>loader.remove(),650);
+      },240);
     },wait);
   };
   if(document.readyState==='complete')done();
