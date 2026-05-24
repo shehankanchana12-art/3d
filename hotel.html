@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Management - SoftVision IT Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#020b18;--blue:#0d47e8;--cyan:#00e5ff;--green:#39ff14;--gold:#ffd700;--mid:#8ab4d4;--border:rgba(0,229,255,.18);--glass:rgba(0,229,255,.07)}
+html{scroll-behavior:smooth}
+body{font-family:'Exo 2',sans-serif;background:var(--navy);color:#fff;overflow-x:hidden;cursor:none}
+h1,h2,h3,h4{font-family:'Orbitron',monospace}
+a{color:inherit}
+#cursor{position:fixed;width:12px;height:12px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--cyan);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .18s ease;opacity:.6}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:70px;padding:0 3rem;display:flex;align-items:center;justify-content:space-between;background:rgba(2,11,24,.78);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:.9rem;text-decoration:none}
+.logo-cube{width:42px;height:42px;position:relative;transform-style:preserve-3d;animation:rotateCube 8s linear infinite}
+.logo-cube-face{position:absolute;width:100%;height:100%;border:1.5px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:900;font-size:.85rem;background:rgba(0,229,255,.06)}
+.front{transform:translateZ(21px)}.back{transform:rotateY(180deg) translateZ(21px)}.left{transform:rotateY(-90deg) translateZ(21px)}.right{transform:rotateY(90deg) translateZ(21px)}.top{transform:rotateX(90deg) translateZ(21px)}.bottom{transform:rotateX(-90deg) translateZ(21px)}
+@keyframes rotateCube{from{transform:rotateX(0) rotateY(0)}to{transform:rotateX(360deg) rotateY(360deg)}}
+.logo-text{font-family:'Orbitron',monospace;font-weight:900;font-size:1.1rem;color:#fff;letter-spacing:.04em}.logo-text span{color:var(--cyan)}
+.nav-links{display:flex;gap:2rem;list-style:none}.nav-links a{color:var(--mid);font-size:.82rem;text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .2s}.nav-links a:hover,.nav-links a.active{color:var(--cyan)}
+.nav-cta,.btn{border:1.5px solid var(--cyan);color:var(--cyan);font-family:'Orbitron',monospace;font-weight:700;font-size:.72rem;padding:.62rem 1.35rem;text-decoration:none;letter-spacing:.1em;text-transform:uppercase;position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;min-height:42px}
+.btn.primary{background:var(--cyan);color:var(--navy);font-weight:900;box-shadow:0 0 32px rgba(0,229,255,.35)}
+.btn:hover,.nav-cta:hover{box-shadow:0 0 42px rgba(0,229,255,.25);transform:translateY(-1px)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}.hamburger span{width:26px;height:2px;background:var(--cyan)}
+.mob-menu{display:none;position:fixed;inset:70px 0 0 0;z-index:150;background:rgba(2,11,24,.97);backdrop-filter:blur(20px);flex-direction:column;padding:2rem;border-top:1px solid var(--border)}.mob-menu.open{display:flex}.mob-menu a{color:var(--mid);font-family:'Orbitron',monospace;font-size:.9rem;text-decoration:none;padding:1rem 0;border-bottom:1px solid rgba(0,229,255,.08);letter-spacing:.08em}
+.hero{position:relative;z-index:1;min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,520px);gap:4rem;align-items:center;padding:110px 3rem 70px;max-width:1350px;margin:0 auto}
+.hero-copy{position:relative;z-index:2}.eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:.8rem;margin-bottom:1.3rem}.eyebrow:before{content:'';width:42px;height:1px;background:var(--cyan)}
+h1{font-size:clamp(2.65rem,6vw,5.35rem);font-weight:900;line-height:.95;margin-bottom:1.5rem}.line-1{display:block}.line-2{display:block;color:transparent;-webkit-text-stroke:1.7px var(--cyan);text-shadow:0 0 45px rgba(0,229,255,.28)}
+.intro{font-size:1.03rem;color:var(--mid);line-height:1.85;max-width:620px;margin-bottom:2rem}.chip-row{display:flex;flex-wrap:wrap;gap:.7rem;margin:0 0 2rem}.chip-row span{border:1px solid var(--border);background:rgba(0,229,255,.04);color:var(--mid);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;padding:.55rem .85rem}
+.actions{display:flex;gap:1rem;flex-wrap:wrap}.sim-wrap{position:relative;min-height:520px;border:1px solid var(--border);background:linear-gradient(135deg,rgba(0,229,255,.08),rgba(13,71,232,.04) 45%,transparent);overflow:hidden}
+.sim-wrap:before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(0,229,255,.08),transparent);animation:scan 4s linear infinite}.sim-wrap:after{content:'HOTEL MANAGEMENT';position:absolute;right:1.4rem;bottom:1rem;color:rgba(0,229,255,.16);font-family:'Orbitron',monospace;font-size:.72rem;letter-spacing:.25em}
+@keyframes scan{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+#sim-canvas{position:absolute;inset:0;width:100%;height:100%}.sim-label{position:absolute;top:1.2rem;left:1.2rem;font-family:'Orbitron',monospace;color:var(--cyan);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase}.sim-panel{position:absolute;right:1.2rem;top:1.2rem;width:150px;border:1px solid var(--border);background:rgba(2,11,24,.6);padding:.9rem}.sim-panel span{display:block;color:var(--mid);font-size:.68rem;margin-bottom:.55rem}.pulse-bar{height:5px;background:rgba(0,229,255,.13);margin-top:.35rem;overflow:hidden}.pulse-bar i{display:block;height:100%;background:var(--cyan);animation:bar 2s ease-in-out infinite}.pulse-bar:nth-child(4) i{animation-delay:.4s}.pulse-bar:nth-child(6) i{animation-delay:.8s}@keyframes bar{0%,100%{width:24%}50%{width:92%}}
+.section{position:relative;z-index:1;padding:90px 3rem;max-width:1350px;margin:0 auto}.section-head{max-width:720px;margin-bottom:3rem}.section h2{font-size:clamp(1.8rem,4vw,3rem);font-weight:900;margin-bottom:.8rem}.section p.lead{color:var(--mid);line-height:1.8}
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5px;background:var(--border);margin-bottom:80px}.metric{background:var(--navy);padding:2rem;position:relative;overflow:hidden}.metric:before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);transform:translateX(-100%);transition:transform .6s}.metric:hover:before{transform:translateX(0)}.metric strong{display:block;font-family:'Orbitron',monospace;font-size:2.1rem;color:var(--cyan);line-height:1}.metric span{display:block;color:var(--mid);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;margin-top:.5rem}
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5px;background:var(--border)}.feature-card{background:var(--navy);padding:2rem;min-height:230px;position:relative;overflow:hidden;transition:background .3s,transform .3s}.feature-card:hover{background:rgba(0,229,255,.04);transform:translateY(-3px)}.card-num{position:absolute;top:1.3rem;right:1.4rem;font-family:'Orbitron',monospace;color:rgba(0,229,255,.24);font-weight:900}.feature-card h3{font-size:.9rem;letter-spacing:.08em;color:#fff;margin:2.4rem 0 .8rem}.feature-card p{color:var(--mid);font-size:.84rem;line-height:1.7}
+.flow{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:3rem;align-items:start}.story{border-left:2px solid var(--cyan);padding-left:1.4rem;color:var(--mid);line-height:1.85}.module-list{list-style:none;border:1px solid var(--border);background:rgba(0,229,255,.03)}.module-list li{display:flex;justify-content:space-between;gap:1rem;border-bottom:1px solid rgba(0,229,255,.12);padding:1rem 1.2rem;color:var(--mid);font-size:.82rem;letter-spacing:.06em}.module-list li:last-child{border-bottom:0}.module-list li:after{content:'ONLINE';font-family:'Orbitron',monospace;font-size:.6rem;color:var(--cyan)}
+.cta-band{position:relative;z-index:1;text-align:center;padding:90px 3rem;border-top:1px solid var(--border)}.cta-band h2{font-size:clamp(2rem,5vw,4rem);font-weight:900;margin-bottom:1rem}.cta-band p{color:var(--mid);max-width:570px;margin:0 auto 2rem;line-height:1.75}
+footer{position:relative;z-index:1;padding:34px 3rem;border-top:1px solid var(--border);color:rgba(138,180,212,.55);font-size:.75rem}.footer-inner{max-width:1350px;margin:0 auto;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}footer a{color:var(--cyan);text-decoration:none}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+@media(max-width:1000px){.nav-links,.nav-cta{display:none}.hamburger{display:flex}.hero{grid-template-columns:1fr}.sim-wrap{min-height:430px}.metric-grid{grid-template-columns:1fr 1fr}.flow{grid-template-columns:1fr}}
+@media(max-width:620px){body{cursor:auto}#cursor,#cursor-ring{display:none}nav{padding:0 1.25rem}.hero,.section,.cta-band{padding-left:1.25rem;padding-right:1.25rem}.metric-grid{grid-template-columns:1fr}.sim-panel{display:none}.logo-text{font-size:.95rem}}
+</style>
+</head>
+<body data-sim="hotel">
+<div id="cursor"></div><div id="cursor-ring"></div><canvas id="bg-canvas"></canvas>
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-cube"><div class="logo-cube-face front">SV</div><div class="logo-cube-face back">IT</div><div class="logo-cube-face left">MCC</div><div class="logo-cube-face right">SV</div><div class="logo-cube-face top">SV</div><div class="logo-cube-face bottom">IT</div></div>
+    <div class="logo-text">Soft<span>Vision</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="pos.html" class="">Solutions</a></li>
+    <li><a href="erp.html" class="">ERP</a></li>
+    <li><a href="contact.html" class="">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta"><span>Get Started</span></a>
+  <div class="hamburger" onclick="document.getElementById('mob').classList.toggle('open')"><span></span><span></span><span></span></div>
+</nav>
+<div class="mob-menu" id="mob">
+  <a href="index.html">Home</a><a href="about.html">About Us</a><a href="pos.html">POS Systems</a><a href="restaurant.html">Restaurant</a><a href="hotel.html">Hotel</a><a href="erp.html">ERP Systems</a><a href="service-mgmt.html">Service Mgmt</a><a href="custom-software.html">Custom Software</a><a href="tailoring.html">Tailoring</a><a href="contact.html">Contact</a>
+</div>
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow reveal">Property Simulation</div>
+      <h1 class="reveal"><span class="line-1">Hotel PMS</span><span class="line-2">Guest Experience Engine</span></h1>
+      <p class="intro reveal">Reservations, front desk, housekeeping, room inventory, billing, guest profiles, and integrations for hotels and guest houses.</p>
+      <div class="chip-row reveal"><span>Reservations</span><span>Housekeeping</span><span>Guest folios</span><span>OTA sync</span></div>
+      <div class="actions reveal"><a class="btn primary" href="contact.html">Schedule PMS Walkthrough</a><a class="btn" href="#features">Explore Modules</a></div>
+    </div>
+    <div class="sim-wrap reveal">
+      <canvas id="sim-canvas"></canvas>
+      <div class="sim-label">Live 3D Simulation</div>
+      <div class="sim-panel"><span>System Load</span><div class="pulse-bar"><i></i></div><span>Sync Health</span><div class="pulse-bar"><i></i></div><span>Data Flow</span><div class="pulse-bar"><i></i></div></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="metric-grid">
+        <div class="metric reveal"><strong>30%</strong><span>Less admin work</span></div>
+        <div class="metric reveal"><strong>Live</strong><span>Room status</span></div>
+        <div class="metric reveal"><strong>100%</strong><span>Folio traceability</span></div>
+        <div class="metric reveal"><strong>Multi</strong><span>Property ready</span></div>
+    </div>
+    <div class="section-head reveal" id="features">
+      <div class="eyebrow">Hotel Management Modules</div>
+      <h2>Everything Your Team Needs, Connected</h2>
+      <p class="lead">Each page has its own animated interface model, while the business workflow stays practical: deploy quickly, train locally, and support the system from MCC Mahiyanganaya.</p>
+    </div>
+    <div class="feature-grid">
+      <article class="feature-card reveal">
+        <span class="card-num">01</span>
+        <h3>Front Desk</h3>
+        <p>Quick check-in, room assignment, guest profiles, ID capture, deposits, and express checkout.</p>
+      </article>
+      <article class="feature-card reveal">
+        <span class="card-num">02</span>
+        <h3>Room Inventory</h3>
+        <p>Availability calendar, rate plans, packages, maintenance blocks, and room moves.</p>
+      </article>
+      <article class="feature-card reveal">
+        <span class="card-num">03</span>
+        <h3>Housekeeping</h3>
+        <p>Cleaning queues, inspection status, minibar notes, maintenance alerts, and staff task tracking.</p>
+      </article>
+      <article class="feature-card reveal">
+        <span class="card-num">04</span>
+        <h3>Integrated Billing</h3>
+        <p>Room charges, restaurant POS links, tax invoices, payments, and ledger exports.</p>
+      </article>
+    </div>
+  </section>
+  <section class="section">
+    <div class="flow">
+      <div>
+        <div class="eyebrow reveal">How It Helps</div>
+        <h2 class="reveal">Built For Real Operations</h2>
+        <p class="story reveal">Gives small and mid-sized properties the same operational clarity as larger hotels, without losing the local support and training your team needs.</p>
+      </div>
+      <ul class="module-list reveal"><li>Booking calendar</li><li>Room rack</li><li>Guest folio</li><li>Housekeeping board</li><li>Rate plans</li><li>POS link</li></ul>
+    </div>
+  </section>
+  <section class="cta-band">
+    <h2 class="reveal">See It Live At MCC</h2>
+    <p class="reveal">Bring your workflow, questions, or current pain points. The SoftVision team can walk you through the right setup and show the system in action.</p>
+    <div class="actions reveal" style="justify-content:center"><a class="btn primary" href="contact.html">Contact The Branch</a><a class="btn" href="index.html">Back To Home</a></div>
+  </section>
+</main>
+<footer><div class="footer-inner"><span>Copyright 2025 SoftVision IT Group - MCC Mahiyanganaya</span><span><a href="tel:+94704449091">+94 70 444 9091</a> / <a href="mailto:info@softvision.lk">info@softvision.lk</a></span></div></footer>
+<script>
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},70);});
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>{cursor.style.transform='translate(-50%,-50%) scale(2.2)';ring.style.transform='translate(-50%,-50%) scale(1.45)';});el.addEventListener('mouseleave',()=>{cursor.style.transform='translate(-50%,-50%) scale(1)';ring.style.transform='translate(-50%,-50%) scale(1)';});});
+const bg=document.getElementById('bg-canvas'),bctx=bg.getContext('2d');let BW=bg.width=innerWidth,BH=bg.height=innerHeight;addEventListener('resize',()=>{BW=bg.width=innerWidth;BH=bg.height=innerHeight;resizeSim();});
+const pts=Array.from({length:110},()=>({x:Math.random()*BW,y:Math.random()*BH,vx:(Math.random()-.5)*.28,vy:(Math.random()-.5)*.28,r:Math.random()*1.4+.4}));
+let mouse={x:-999,y:-999};document.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+function drawBg(){bctx.clearRect(0,0,BW,BH);const g=bctx.createRadialGradient(BW*.7,BH*.25,0,BW*.7,BH*.25,BW*.8);g.addColorStop(0,'rgba(13,71,232,.07)');g.addColorStop(1,'transparent');bctx.fillStyle=g;bctx.fillRect(0,0,BW,BH);bctx.strokeStyle='rgba(0,229,255,.03)';for(let x=0;x<BW;x+=80){bctx.beginPath();bctx.moveTo(x,0);bctx.lineTo(x,BH);bctx.stroke()}for(let y=0;y<BH;y+=80){bctx.beginPath();bctx.moveTo(0,y);bctx.lineTo(BW,y);bctx.stroke()}pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=BW;if(p.x>BW)p.x=0;if(p.y<0)p.y=BH;if(p.y>BH)p.y=0;const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<110){p.vx+=dx/d*.015;p.vy+=dy/d*.015}bctx.beginPath();bctx.arc(p.x,p.y,p.r,0,Math.PI*2);bctx.fillStyle='rgba(0,229,255,.45)';bctx.fill()});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<120){bctx.beginPath();bctx.moveTo(pts[i].x,pts[i].y);bctx.lineTo(pts[j].x,pts[j].y);bctx.strokeStyle='rgba(0,229,255,'+(.1*(1-d/120))+')';bctx.stroke()}}requestAnimationFrame(drawBg)}drawBg();
+const reveals=document.querySelectorAll('.reveal');const ro=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*60)})},{threshold:.12});reveals.forEach(r=>ro.observe(r));
+const sim=document.getElementById('sim-canvas'),sctx=sim.getContext('2d');let SW=0,SH=0,t=0,kind=document.body.dataset.sim;function resizeSim(){const r=sim.parentElement.getBoundingClientRect();SW=sim.width=Math.max(320,Math.floor(r.width));SH=sim.height=Math.max(320,Math.floor(r.height))}resizeSim();
+function iso(x,y,z){return {x:SW/2+(x-y)*32,y:SH*.55+(x+y)*15-z*32}}
+function cube(x,y,z,w,h,d,color){const p=iso(x,y,z),top=iso(x+w,y,z+d),side=iso(x+w,y+h,z),front=iso(x,y+h,z);sctx.fillStyle=color;sctx.strokeStyle='rgba(0,229,255,.42)';sctx.lineWidth=1;sctx.beginPath();sctx.moveTo(p.x,p.y);sctx.lineTo(top.x,top.y);sctx.lineTo(iso(x+w,y+h,z+d).x,iso(x+w,y+h,z+d).y);sctx.lineTo(front.x,front.y);sctx.closePath();sctx.fill();sctx.stroke();sctx.beginPath();sctx.moveTo(front.x,front.y);sctx.lineTo(iso(x+w,y+h,z+d).x,iso(x+w,y+h,z+d).y);sctx.lineTo(side.x,side.y);sctx.lineTo(iso(x,y+h,z-d).x,iso(x,y+h,z-d).y);sctx.closePath();sctx.fillStyle='rgba(0,229,255,.07)';sctx.fill();sctx.stroke()}
+function drawSim(){sctx.clearRect(0,0,SW,SH);const grd=sctx.createRadialGradient(SW/2,SH/2,0,SW/2,SH/2,Math.max(SW,SH)*.7);grd.addColorStop(0,'rgba(0,229,255,.12)');grd.addColorStop(1,'rgba(2,11,24,0)');sctx.fillStyle=grd;sctx.fillRect(0,0,SW,SH);sctx.strokeStyle='rgba(0,229,255,.1)';for(let i=-8;i<=8;i++){const a=iso(i,-8,0),b=iso(i,8,0),c=iso(-8,i,0),d=iso(8,i,0);sctx.beginPath();sctx.moveTo(a.x,a.y);sctx.lineTo(b.x,b.y);sctx.moveTo(c.x,c.y);sctx.lineTo(d.x,d.y);sctx.stroke()}const phase=t*.025;
+if(kind==='restaurant'){for(let x=-3;x<=3;x+=3)for(let y=-3;y<=3;y+=3)cube(x,y,0,1.2,1.2,.35,'rgba(0,229,255,.11)');for(let i=0;i<9;i++){const a=phase+i*.7,r=2.8+(i%3)*1.4,p=iso(Math.cos(a)*r,Math.sin(a)*r,1.1+Math.sin(a)*.5);sctx.fillStyle='rgba(57,255,20,.75)';sctx.beginPath();sctx.arc(p.x,p.y,4,0,7);sctx.fill()}}
+else if(kind==='hotel'){for(let x=-4;x<=2;x+=2)for(let y=-3;y<=3;y+=2){const lit=(Math.sin(phase*2+x+y)>0);cube(x,y,0,1.1,1.1,lit?.9:.35,lit?'rgba(0,229,255,.18)':'rgba(0,229,255,.06)')}}
+else if(kind==='erp'){for(let i=0;i<7;i++){const a=phase+i*Math.PI*2/7,p=iso(Math.cos(a)*4,Math.sin(a)*4,1);cube(Math.cos(a)*4,Math.sin(a)*4,0,.75,.75,.55,'rgba(0,229,255,.12)');const c=iso(0,0,1);sctx.strokeStyle='rgba(0,229,255,.3)';sctx.beginPath();sctx.moveTo(c.x,c.y);sctx.lineTo(p.x,p.y);sctx.stroke()}cube(-.8,-.8,0,1.6,1.6,1.2,'rgba(57,255,20,.16)')}
+else if(kind==='service'){for(let i=0;i<10;i++){const a=i*.7+phase*.8,p=iso(Math.cos(a)*(2+i%3),Math.sin(a)*(3+i%2),.3);cube(Math.cos(a)*(2+i%3),Math.sin(a)*(3+i%2),0,.55,.55,.35,'rgba(0,229,255,.12)');sctx.fillStyle=i%3?'rgba(0,229,255,.7)':'rgba(255,215,0,.75)';sctx.beginPath();sctx.arc(p.x,p.y-20,3.5,0,7);sctx.fill()}}
+else if(kind==='custom'){for(let i=0;i<6;i++){const x=-4+i*1.6,y=Math.sin(phase+i)*2;cube(x,y,0,1,1,.5+i*.08,'rgba(0,229,255,.11)');const p=iso(x,y,1.2);sctx.fillStyle='rgba(57,255,20,.65)';sctx.fillRect(p.x-10,p.y-3,20,6)}}
+else if(kind==='tailoring'){for(let i=0;i<8;i++){const x=-4+i*1.1,y=Math.sin(i+phase)*1.8;cube(x,y,0,.75,.75,.25,'rgba(0,229,255,.1)');const p=iso(x,y,.8);sctx.strokeStyle='rgba(57,255,20,.55)';sctx.beginPath();sctx.arc(p.x,p.y,12+Math.sin(phase+i)*3,0,Math.PI*2);sctx.stroke()}}
+else if(kind==='contact'){for(let i=0;i<12;i++){const a=phase+i*Math.PI/6,r=2.5+Math.sin(phase+i)*1.6,p=iso(Math.cos(a)*r,Math.sin(a)*r,.7);sctx.strokeStyle='rgba(0,229,255,.18)';sctx.beginPath();sctx.moveTo(SW/2,SH*.55);sctx.lineTo(p.x,p.y);sctx.stroke();sctx.fillStyle='rgba(0,229,255,.65)';sctx.beginPath();sctx.arc(p.x,p.y,4,0,7);sctx.fill()}cube(-1,-1,0,2,2,1,'rgba(57,255,20,.14)')}
+else{for(let x=-4;x<=4;x+=2)for(let y=-3;y<=3;y+=2){const h=.4+Math.abs(Math.sin(phase+x+y))*1.4;cube(x,y,0,1,1,h,'rgba(0,229,255,.12)')}for(let i=0;i<8;i++){const p=iso(-5+i*1.4,Math.sin(phase*2+i)*2,1.8);sctx.fillStyle='rgba(57,255,20,.8)';sctx.fillRect(p.x-10,p.y-2,20,4)}}
+t++;requestAnimationFrame(drawSim)}drawSim();
+</script>
+</body>
+</html>

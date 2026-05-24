@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us – SoftVision IT Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--navy:#020b18;--blue:#0d47e8;--cyan:#00e5ff;--electric:#39ff14;--gold:#ffd700;--mid:#8ab4d4;--border:rgba(0,229,255,0.18);}
+html{scroll-behavior:smooth;}
+body{font-family:'Exo 2',sans-serif;background:var(--navy);color:#fff;overflow-x:hidden;cursor:none;}
+h1,h2,h3,h4{font-family:'Orbitron',monospace;}
+#cursor{position:fixed;width:12px;height:12px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--cyan);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.18s ease;opacity:0.6;}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 3rem;height:70px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,11,24,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:center;gap:0.9rem;text-decoration:none;}
+.logo-cube{width:42px;height:42px;position:relative;transform-style:preserve-3d;animation:rotateCube 8s linear infinite;}
+.logo-cube-face{position:absolute;width:100%;height:100%;border:1.5px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:900;font-size:0.9rem;background:rgba(0,229,255,0.06);}
+.logo-cube-face.front{transform:translateZ(21px);}.logo-cube-face.back{transform:rotateY(180deg) translateZ(21px);}.logo-cube-face.left{transform:rotateY(-90deg) translateZ(21px);}.logo-cube-face.right{transform:rotateY(90deg) translateZ(21px);}.logo-cube-face.top{transform:rotateX(90deg) translateZ(21px);}.logo-cube-face.bottom{transform:rotateX(-90deg) translateZ(21px);}
+@keyframes rotateCube{from{transform:rotateX(0) rotateY(0)}to{transform:rotateX(360deg) rotateY(360deg)}}
+.logo-text{font-family:'Orbitron',monospace;font-weight:900;font-size:1.1rem;color:#fff;}.logo-text span{color:var(--cyan);}
+.nav-links{display:flex;gap:2rem;list-style:none;}.nav-links a{color:var(--mid);font-size:0.82rem;font-weight:500;text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s;}.nav-links a:hover,.nav-links a.active{color:var(--cyan);}
+.nav-cta{background:transparent;border:1.5px solid var(--cyan);color:var(--cyan);font-family:'Orbitron',monospace;font-weight:700;font-size:0.72rem;padding:0.55rem 1.4rem;border-radius:2px;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;position:relative;overflow:hidden;transition:color 0.3s;}
+.nav-cta::before{content:'';position:absolute;inset:0;background:var(--cyan);transform:translateX(-100%);transition:transform 0.3s;}.nav-cta:hover::before{transform:translateX(0);}.nav-cta:hover{color:var(--navy);}.nav-cta span{position:relative;z-index:1;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}.hamburger span{width:26px;height:2px;background:var(--cyan);}
+.mob-menu{display:none;position:fixed;inset:70px 0 0 0;z-index:150;background:rgba(2,11,24,0.97);flex-direction:column;padding:2rem;gap:0;border-top:1px solid var(--border);}
+.mob-menu.open{display:flex;}.mob-menu a{color:var(--mid);font-family:'Orbitron',monospace;font-size:0.9rem;text-decoration:none;padding:1rem 0;border-bottom:1px solid rgba(0,229,255,0.08);letter-spacing:0.08em;transition:color 0.2s;}.mob-menu a:hover{color:var(--cyan);}
+
+/* HERO */
+.about-hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;padding:100px 3rem 60px;overflow:hidden;}
+#three-canvas{position:absolute;inset:0;z-index:0;}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:900px;}
+.hero-tag{display:inline-block;font-size:0.7rem;font-weight:700;letter-spacing:0.35em;text-transform:uppercase;color:var(--cyan);border:1px solid var(--cyan);padding:0.4rem 1.2rem;margin-bottom:2rem;animation:fadeUp 0.6s ease both;position:relative;overflow:hidden;}
+.hero-tag::before{content:'';position:absolute;inset:0;background:var(--cyan);transform:translateX(-100%);animation:tagSlide 0.8s ease 0.3s forwards;}
+.hero-tag span{position:relative;z-index:1;}
+@keyframes tagSlide{0%{transform:translateX(-100%)}50%{transform:translateX(0)}100%{transform:translateX(100%)}}
+.about-title{font-size:clamp(3rem,8vw,6rem);font-weight:900;line-height:0.9;margin-bottom:2rem;animation:fadeUp 0.7s ease both 0.15s;}
+.about-title .w1{display:block;color:#fff;}
+.about-title .w2{display:block;color:transparent;-webkit-text-stroke:2px var(--cyan);text-shadow:0 0 40px rgba(0,229,255,0.3);}
+.about-title .w3{display:block;font-size:0.25em;color:var(--mid);letter-spacing:0.3em;font-weight:400;margin-top:1rem;-webkit-text-stroke:0;}
+.about-subtitle{font-size:1.1rem;color:var(--mid);max-width:600px;margin:0 auto 3rem;line-height:1.8;animation:fadeUp 0.7s ease both 0.25s;}
+.scroll-indicator{position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;z-index:2;animation:fadeUp 0.7s ease both 0.5s;}
+.scroll-dot{width:4px;height:30px;border:1px solid var(--cyan);border-radius:2px;position:relative;overflow:hidden;}
+.scroll-dot::after{content:'';position:absolute;top:-100%;left:0;right:0;height:50%;background:var(--cyan);animation:scrollDot 1.5s ease infinite;}
+@keyframes scrollDot{from{top:-100%}to{top:200%}}
+.scroll-label{font-size:0.6rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--mid);}
+
+/* MISSION */
+.section{padding:100px 3rem;position:relative;z-index:1;max-width:1300px;margin:0 auto;}
+.sec-eyebrow{font-size:0.7rem;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem;}
+.sec-eyebrow::before{content:'▶';font-size:0.5rem;}
+.sec-title{font-size:clamp(1.8rem,4vw,3rem);font-weight:900;margin-bottom:1.25rem;}
+.sec-desc{color:var(--mid);line-height:1.85;font-size:0.95rem;max-width:600px;}
+
+/* TIMELINE */
+.timeline{position:relative;padding:0 0 0 3rem;margin-top:4rem;}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--cyan),transparent);}
+.tl-item{position:relative;margin-bottom:3rem;animation:fadeUp 0.6s ease both;}
+.tl-dot{position:absolute;left:-3.35rem;top:0.3rem;width:12px;height:12px;border:2px solid var(--cyan);background:var(--navy);transform:rotate(45deg);}
+.tl-dot::after{content:'';position:absolute;inset:2px;background:var(--cyan);transform:scale(0);transition:transform 0.3s;}
+.tl-item:hover .tl-dot::after{transform:scale(1);}
+.tl-year{font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;color:var(--cyan);letter-spacing:0.2em;margin-bottom:0.4rem;}
+.tl-title{font-family:'Orbitron',monospace;font-size:0.95rem;font-weight:700;margin-bottom:0.4rem;}
+.tl-text{font-size:0.82rem;color:var(--mid);line-height:1.7;}
+
+/* ALLIANCE CARDS */
+.alliance-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--border);margin-top:3rem;}
+.alliance-card{background:var(--navy);padding:2.5rem 2rem;position:relative;overflow:hidden;transition:background 0.3s;}
+.alliance-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,255,0.06),transparent);opacity:0;transition:opacity 0.3s;}
+.alliance-card:hover{background:rgba(0,229,255,0.03);}
+.alliance-card:hover::before{opacity:1;}
+.ac-num{font-family:'Orbitron',monospace;font-size:4rem;font-weight:900;color:rgba(0,229,255,0.06);position:absolute;top:1rem;right:1.5rem;line-height:1;}
+.ac-icon{font-size:2.5rem;margin-bottom:1.25rem;}
+.ac-name{font-family:'Orbitron',monospace;font-size:0.85rem;font-weight:700;color:var(--cyan);margin-bottom:0.25rem;letter-spacing:0.08em;}
+.ac-sub{font-size:0.7rem;color:rgba(0,229,255,0.5);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem;}
+.ac-desc{font-size:0.82rem;color:var(--mid);line-height:1.7;}
+
+/* TECH STACK */
+.tech-section{padding:100px 3rem;position:relative;z-index:1;overflow:hidden;}
+.tech-section::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(13,71,232,0.05),transparent);}
+.tech-inner{max-width:1300px;margin:0 auto;}
+.tech-ticker{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.25rem 0;margin:3rem 0;position:relative;}
+.tech-ticker::before,.tech-ticker::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2;}
+.tech-ticker::before{left:0;background:linear-gradient(90deg,var(--navy),transparent);}
+.tech-ticker::after{right:0;background:linear-gradient(-90deg,var(--navy),transparent);}
+.ticker-track{display:flex;gap:3rem;animation:ticker 20s linear infinite;white-space:nowrap;}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{display:flex;align-items:center;gap:0.75rem;font-family:'Orbitron',monospace;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:var(--mid);white-space:nowrap;}
+.ticker-dot{width:6px;height:6px;background:var(--cyan);border-radius:50%;}
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;}
+.tech-card{border:1px solid var(--border);padding:1.25rem;text-align:center;transition:border-color 0.3s,background 0.3s;position:relative;overflow:hidden;}
+.tech-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,255,0.08),transparent);opacity:0;transition:opacity 0.3s;}
+.tech-card:hover{border-color:var(--cyan);background:rgba(0,229,255,0.03);}
+.tech-card:hover::after{opacity:1;}
+.tech-card-icon{font-size:2rem;margin-bottom:0.75rem;}
+.tech-card-name{font-family:'Orbitron',monospace;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;}
+.tech-card-desc{font-size:0.72rem;color:var(--mid);margin-top:0.3rem;}
+
+/* STATS GRID */
+.stats-section{padding:80px 3rem;position:relative;z-index:1;}
+.stats-inner{max-width:1300px;margin:0 auto;}
+.big-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5px;background:var(--border);}
+.big-stat{background:var(--navy);padding:2.5rem 2rem;position:relative;overflow:hidden;}
+.big-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);transform:translateX(-100%);transition:transform 0.6s;}
+.big-stat:hover::before{transform:translateX(0);}
+.big-stat-num{font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;color:var(--cyan);line-height:1;margin-bottom:0.4rem;}
+.big-stat-label{font-size:0.72rem;color:var(--mid);letter-spacing:0.12em;text-transform:uppercase;}
+.big-stat-desc{font-size:0.78rem;color:rgba(138,180,212,0.6);margin-top:0.5rem;line-height:1.5;}
+
+/* TEAM/VALUES */
+.values-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem;margin-top:3rem;}
+.val-card{border:1px solid var(--border);padding:2rem;position:relative;transition:border-color 0.3s,transform 0.3s;}
+.val-card:hover{border-color:var(--cyan);transform:translateY(-4px);}
+.val-icon{font-size:2rem;margin-bottom:1rem;}
+.val-title{font-family:'Orbitron',monospace;font-size:0.82rem;font-weight:700;margin-bottom:0.5rem;letter-spacing:0.08em;}
+.val-text{font-size:0.82rem;color:var(--mid);line-height:1.7;}
+.val-num{position:absolute;bottom:1.5rem;right:1.5rem;font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;color:rgba(0,229,255,0.04);line-height:1;}
+
+/* CTA */
+.about-cta{padding:100px 3rem;text-align:center;position:relative;z-index:1;overflow:hidden;}
+.about-cta::before{content:'SOFTVISION';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Orbitron',monospace;font-size:20vw;font-weight:900;color:rgba(0,229,255,0.02);white-space:nowrap;pointer-events:none;}
+.about-cta h2{font-size:clamp(2rem,5vw,4rem);font-weight:900;margin-bottom:1.25rem;}
+.about-cta p{color:var(--mid);font-size:1rem;max-width:500px;margin:0 auto 2.5rem;line-height:1.8;}
+.cta-chips{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.chip{display:flex;align-items:center;gap:0.6rem;border:1px solid var(--border);padding:0.7rem 1.4rem;font-size:0.82rem;color:var(--mid);text-decoration:none;transition:border-color 0.2s,color 0.2s;letter-spacing:0.05em;}
+.chip:hover{border-color:var(--cyan);color:var(--cyan);}
+.btn-glow{background:var(--cyan);color:var(--navy);font-family:'Orbitron',monospace;font-weight:900;font-size:0.78rem;padding:0.9rem 2.2rem;border-radius:2px;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;box-shadow:0 0 30px rgba(0,229,255,0.4);transition:box-shadow 0.3s,transform 0.2s;display:inline-block;}
+.btn-glow:hover{box-shadow:0 0 60px rgba(0,229,255,0.6);transform:translateY(-2px);}
+
+footer{position:relative;z-index:1;padding:50px 3rem 30px;border-top:1px solid var(--border);}
+.footer-bottom{display:flex;justify-content:space-between;font-size:0.72rem;color:rgba(138,180,212,0.5);max-width:1300px;margin:0 auto;flex-wrap:wrap;gap:0.5rem;}
+.footer-bottom a{color:var(--cyan);text-decoration:none;}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:1000px){.nav-links,.nav-cta{display:none;}.hamburger{display:flex;}.alliance-grid{grid-template-columns:1fr;}.big-stats{grid-template-columns:1fr 1fr;}}
+@media(max-width:600px){.big-stats{grid-template-columns:1fr;}.section,.tech-section,.stats-section,.about-cta{padding:70px 1.5rem;}}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<canvas id="bg-canvas"></canvas>
+
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-cube"><div class="logo-cube-face front">SV</div><div class="logo-cube-face back">IT</div><div class="logo-cube-face left">MCC</div><div class="logo-cube-face right">SV</div><div class="logo-cube-face top">SV</div><div class="logo-cube-face bottom">IT</div></div>
+    <div class="logo-text">Soft<span>Vision</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li><li><a href="about.html" class="active">About</a></li><li><a href="pos.html">Solutions</a></li><li><a href="erp.html">ERP</a></li><li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta"><span>Get Started →</span></a>
+  <div class="hamburger" onclick="document.getElementById('mob').classList.toggle('open')"><span></span><span></span><span></span></div>
+</nav>
+<div class="mob-menu" id="mob">
+  <a href="index.html">⬡ Home</a><a href="about.html">⬡ About Us</a><a href="pos.html">⬡ POS Systems</a><a href="restaurant.html">⬡ Restaurant</a><a href="hotel.html">⬡ Hotel</a><a href="erp.html">⬡ ERP Systems</a><a href="service-mgmt.html">⬡ Service Mgmt</a><a href="custom-software.html">⬡ Custom Software</a><a href="tailoring.html">⬡ Tailoring</a><a href="contact.html">⬡ Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="about-hero">
+  <canvas id="three-canvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-tag"><span>Our Story · Mission · Technology</span></div>
+    <h1 class="about-title">
+      <span class="w1">About</span>
+      <span class="w2">SoftVision</span>
+      <span class="w3">IT Group — MCC Mahiyanganaya Branch</span>
+    </h1>
+    <p class="about-subtitle">15+ years of enterprise software excellence, now brought directly to the businesses of Uva and Eastern Sri Lanka through our regional branch at the Mahiyangana Commercial Complex.</p>
+  </div>
+  <div class="scroll-indicator"><div class="scroll-dot"></div><div class="scroll-label">Scroll</div></div>
+</section>
+
+<!-- MISSION -->
+<div class="section reveal">
+  <div class="sec-eyebrow">Who We Are</div>
+  <h2 class="sec-title">Bridging Enterprise Tech<br>With Local Business</h2>
+  <p class="sec-desc" style="margin-bottom:1.5rem;">Soft Vision Technologies (Pvt) Ltd — operating as SoftVision IT Group — has spent over fifteen years evolving from a targeted vendor of localized business management systems into a diversified enterprise platform handler and BPO provider.</p>
+  <p class="sec-desc">Our decision to open a regional branch at the Mahiyangana Commercial Complex (MCC) in Mahiyanganaya signals a strategic commitment to decentralize high-tier digital infrastructure beyond the Western Province — bringing it directly to the rural economic drivers of Sri Lanka.</p>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2008 – 2010</div><div class="tl-title">Foundation</div><div class="tl-text">Soft Vision Technologies founded in Colombo. Initial focus on localized business management systems and ERP deployments for Sri Lankan enterprises.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2012 – 2015</div><div class="tl-title">Alliance Formation</div><div class="tl-text">Formation of the tripartite alliance: Soft Vision Technologies + Busy InfoTech (ERP/accounting) + Skyb Overseas Consultants (career routing). Surpassed 300 active clients.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2017 – 2020</div><div class="tl-title">Cloud & Scale</div><div class="tl-text">Launched cloud-native product suite. Deployed Docker containerization, PostgreSQL + Redis stack. 750+ clients across international borders. 99.99% SLA achieved.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2023 – 2024</div><div class="tl-title">Industrial Specialization</div><div class="tl-text">Launched Fuel Billing Systems and Container Yard Management with 3D spatial mapping. Integration Platform hit 200+ pre-engineered connectors.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2025 – Present</div><div class="tl-title">MCC Mahiyanganaya</div><div class="tl-text">Opened the MCC regional branch — bringing enterprise software directly to Uva and Eastern province businesses for the first time. Local support. Local language. Local impact.</div></div>
+  </div>
+</div>
+
+<!-- ALLIANCE -->
+<div style="padding:0 3rem 100px;position:relative;z-index:1;max-width:1300px;margin:0 auto;">
+  <div class="sec-eyebrow reveal">Our Group Structure</div>
+  <h2 class="sec-title reveal">The Tripartite Alliance</h2>
+  <p class="sec-desc reveal">SoftVision operates via a unified corporate coalition tackling three distinct pillars of modern enterprise growth.</p>
+  <div class="alliance-grid">
+    <div class="alliance-card reveal">
+      <div class="ac-num">01</div>
+      <div class="ac-icon">⚙️</div>
+      <div class="ac-name">Soft Vision Technologies</div>
+      <div class="ac-sub">Core Engineering Entity</div>
+      <div class="ac-desc">Enterprise-grade software development, API infrastructure, custom web and native mobile application ecosystems, and specialized cloud integrations. The technical backbone of the group.</div>
+    </div>
+    <div class="alliance-card reveal">
+      <div class="ac-num">02</div>
+      <div class="ac-icon">📒</div>
+      <div class="ac-name">Busy InfoTech</div>
+      <div class="ac-sub">Financial & ERP Division</div>
+      <div class="ac-desc">The fiscal engine of the alliance. Handles next-generation Cloud ERP architectures and BUSY Accounting Software deployment — covering complex commercial ledgers, automated inventory pipelines and tax compliance.</div>
+    </div>
+    <div class="alliance-card reveal">
+      <div class="ac-num">03</div>
+      <div class="ac-icon">🌐</div>
+      <div class="ac-name">Skyb Overseas Consultants</div>
+      <div class="ac-sub">Global Talent Routing</div>
+      <div class="ac-desc">Manages educational and career routing services, creating a direct pipeline between technical training and international market placement. Ensures steady influx of global talent into the group.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TECH STACK -->
+<div class="tech-section">
+  <div class="tech-inner">
+    <div class="sec-eyebrow reveal">Our Engineering Stack</div>
+    <h2 class="sec-title reveal">Built on Enterprise-Grade<br>Cloud-Native Technology</h2>
+    <div class="tech-ticker">
+      <div class="ticker-track">
+        <span class="ticker-item"><span class="ticker-dot"></span>React.js</span><span class="ticker-item"><span class="ticker-dot"></span>Node.js</span><span class="ticker-item"><span class="ticker-dot"></span>Python</span><span class="ticker-item"><span class="ticker-dot"></span>Java</span><span class="ticker-item"><span class="ticker-dot"></span>PostgreSQL</span><span class="ticker-item"><span class="ticker-dot"></span>Redis Cache</span><span class="ticker-item"><span class="ticker-dot"></span>Docker</span><span class="ticker-item"><span class="ticker-dot"></span>Cloud Native</span><span class="ticker-item"><span class="ticker-dot"></span>REST API</span><span class="ticker-item"><span class="ticker-dot"></span>JWT Auth</span><span class="ticker-item"><span class="ticker-dot"></span>SSO / MFA</span><span class="ticker-item"><span class="ticker-dot"></span>RBAC</span>
+        <!-- duplicate for seamless loop -->
+        <span class="ticker-item"><span class="ticker-dot"></span>React.js</span><span class="ticker-item"><span class="ticker-dot"></span>Node.js</span><span class="ticker-item"><span class="ticker-dot"></span>Python</span><span class="ticker-item"><span class="ticker-dot"></span>Java</span><span class="ticker-item"><span class="ticker-dot"></span>PostgreSQL</span><span class="ticker-item"><span class="ticker-dot"></span>Redis Cache</span><span class="ticker-item"><span class="ticker-dot"></span>Docker</span><span class="ticker-item"><span class="ticker-dot"></span>Cloud Native</span><span class="ticker-item"><span class="ticker-dot"></span>REST API</span><span class="ticker-item"><span class="ticker-dot"></span>JWT Auth</span><span class="ticker-item"><span class="ticker-dot"></span>SSO / MFA</span><span class="ticker-item"><span class="ticker-dot"></span>RBAC</span>
+      </div>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card reveal"><div class="tech-card-icon">⚛️</div><div class="tech-card-name">React.js</div><div class="tech-card-desc">Modern UI interfaces</div></div>
+      <div class="tech-card reveal"><div class="tech-card-icon">🟢</div><div class="tech-card-name">Node.js</div><div class="tech-card-desc">Scalable backend APIs</div></div>
+      <div class="tech-card reveal"><div class="tech-card-icon">🐍</div><div class="tech-card-name">Python</div><div class="tech-card-desc">Data & automation</div></div>
+      <div class="tech-card reveal"><div class="tech-card-icon">☕</div><div class="tech-card-name">Java</div><div class="tech-card-desc">Enterprise backends</div></div>
+      <div class="tech-card reveal"><div class="tech-card-icon">🐘</div><div class="tech-card-name">PostgreSQL</div><div class="tech-card-desc">Relational data storage</div></div>
+      <div class="tech-card reveal"><div class="tech-card-icon">🔴</div><div class="tech-card-name">Redis</div><div class="tech-card-desc">Low-latency caching</div></div>
+      <div class="tech-card reveal"><div class="tech-card-icon">🐳</div><div class="tech-card-name">Docker</div><div class="tech-card-desc">Isolated containers</div></div>
+      <div class="tech-card reveal"><div class="tech-card-icon">☁️</div><div class="tech-card-name">Cloud Deploy</div><div class="tech-card-desc">Auto-scaling infrastructure</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="stats-inner">
+    <div class="big-stats">
+      <div class="big-stat reveal"><div class="big-stat-num">15<span style="font-size:0.5em">+</span></div><div class="big-stat-label">Years of Operation</div><div class="big-stat-desc">Continuous delivery since foundation</div></div>
+      <div class="big-stat reveal"><div class="big-stat-num">750<span style="font-size:0.5em">+</span></div><div class="big-stat-label">Active Clients</div><div class="big-stat-desc">Across international borders</div></div>
+      <div class="big-stat reveal"><div class="big-stat-num">200<span style="font-size:0.5em">+</span></div><div class="big-stat-label">Connectors</div><div class="big-stat-desc">Pre-engineered integrations</div></div>
+      <div class="big-stat reveal"><div class="big-stat-num">99<span style="font-size:0.5em">.99%</span></div><div class="big-stat-label">Uptime SLA</div><div class="big-stat-desc">Global service guarantee</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- VALUES -->
+<div class="section" style="padding-top:0;">
+  <div class="sec-eyebrow reveal">Our Core Values</div>
+  <h2 class="sec-title reveal">What Drives Us</h2>
+  <div class="values-grid">
+    <div class="val-card reveal"><div class="val-num">01</div><div class="val-icon">🎯</div><div class="val-title">Local First</div><div class="val-text">Enterprise software belongs wherever commerce happens — not just in Colombo. We bring it to you.</div></div>
+    <div class="val-card reveal"><div class="val-num">02</div><div class="val-icon">⚡</div><div class="val-title">Speed & Reliability</div><div class="val-text">99.99% uptime SLA. Same-day local support. Systems that work when your business needs them most.</div></div>
+    <div class="val-card reveal"><div class="val-num">03</div><div class="val-icon">🔐</div><div class="val-title">Security First</div><div class="val-text">SSO, MFA, RBAC, and encrypted cloud storage — enterprise security built into every system we deploy.</div></div>
+    <div class="val-card reveal"><div class="val-num">04</div><div class="val-icon">📚</div><div class="val-title">Knowledge Transfer</div><div class="val-text">We don't just install software. We train your team in Sinhala and ensure real adoption, not dependency.</div></div>
+    <div class="val-card reveal"><div class="val-num">05</div><div class="val-icon">🔗</div><div class="val-title">Interoperability</div><div class="val-text">200+ integrations. Our systems connect to everything — from petrol pumps to container yards to legacy ERPs.</div></div>
+    <div class="val-card reveal"><div class="val-num">06</div><div class="val-icon">🌱</div><div class="val-title">Growth Partnership</div><div class="val-text">We grow as our clients grow. From a single POS to a full ERP rollout — we're with you every step.</div></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="about-cta">
+  <h2 class="reveal">Come Meet Us</h2>
+  <p class="reveal">Walk into our MCC Mahiyanganaya branch — no appointment needed. See the systems live, ask your questions, and get a solution built for your business.</p>
+  <div class="cta-chips reveal">
+    <a href="contact.html" class="btn-glow">Visit or Contact →</a>
+    <a href="tel:+94704449091" class="chip">📞 +94 70 444 9091</a>
+    <a href="mailto:info@softvision.lk" class="chip">✉️ info@softvision.lk</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bottom"><span>© 2025 SoftVision IT Group · MCC Mahiyanganaya</span><span><a href="index.html">← Back to Home</a></span></div>
+</footer>
+
+<script>
+// Custom cursor
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},80);});
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>{cursor.style.transform='translate(-50%,-50%) scale(2.5)';});el.addEventListener('mouseleave',()=>{cursor.style.transform='translate(-50%,-50%) scale(1)';});});
+
+// BG Canvas particles
+const bgC=document.getElementById('bg-canvas'),bgCtx=bgC.getContext('2d');
+let W=bgC.width=window.innerWidth,H=bgC.height=window.innerHeight;
+window.addEventListener('resize',()=>{W=bgC.width=window.innerWidth;H=bgC.height=window.innerHeight;});
+const pts=Array.from({length:80},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.25,vy:(Math.random()-0.5)*0.25,r:Math.random()*1.2+0.4}));
+function drawBg(){bgCtx.clearRect(0,0,W,H);bgCtx.strokeStyle='rgba(0,229,255,0.025)';bgCtx.lineWidth=1;for(let x=0;x<W;x+=80){bgCtx.beginPath();bgCtx.moveTo(x,0);bgCtx.lineTo(x,H);bgCtx.stroke();}for(let y=0;y<H;y+=80){bgCtx.beginPath();bgCtx.moveTo(0,y);bgCtx.lineTo(W,y);bgCtx.stroke();}pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;bgCtx.beginPath();bgCtx.arc(p.x,p.y,p.r,0,Math.PI*2);bgCtx.fillStyle='rgba(0,229,255,0.4)';bgCtx.fill();});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<120){bgCtx.beginPath();bgCtx.moveTo(pts[i].x,pts[i].y);bgCtx.lineTo(pts[j].x,pts[j].y);bgCtx.strokeStyle=`rgba(0,229,255,${0.1*(1-d/120)})`;bgCtx.lineWidth=0.5;bgCtx.stroke();}}requestAnimationFrame(drawBg);}drawBg();
+
+// 3D orbit simulation on about hero canvas
+const tc=document.getElementById('three-canvas');
+tc.width=window.innerWidth;tc.height=window.innerHeight;
+const tCtx=tc.getContext('2d');
+window.addEventListener('resize',()=>{tc.width=window.innerWidth;tc.height=window.innerHeight;});
+let mouseX=0,mouseY=0;
+document.addEventListener('mousemove',e=>{mouseX=(e.clientX/window.innerWidth-0.5)*2;mouseY=(e.clientY/window.innerHeight-0.5)*2;});
+const orbitals=[];
+for(let i=0;i<6;i++){const r=80+i*50;const count=6+i*4;for(let j=0;j<count;j++){orbitals.push({r,angle:(j/count)*Math.PI*2,speed:(0.003+Math.random()*0.003)*(i%2?1:-1),size:2+Math.random()*2,orbit:i});}}
+let t3=0;
+function draw3d(){
+  tCtx.clearRect(0,0,tc.width,tc.height);
+  const cx=tc.width/2+mouseX*30,cy=tc.height/2+mouseY*20;
+  // Central glow
+  const grd=tCtx.createRadialGradient(cx,cy,0,cx,cy,200);
+  grd.addColorStop(0,'rgba(0,229,255,0.12)');grd.addColorStop(0.4,'rgba(13,71,232,0.08)');grd.addColorStop(1,'transparent');
+  tCtx.fillStyle=grd;tCtx.fillRect(0,0,tc.width,tc.height);
+  // Orbit rings
+  for(let i=0;i<6;i++){const r=80+i*50;tCtx.beginPath();tCtx.ellipse(cx,cy,r,r*0.35,0,0,Math.PI*2);tCtx.strokeStyle=`rgba(0,229,255,${0.06-i*0.008})`;tCtx.lineWidth=1;tCtx.stroke();}
+  // Particles on orbits
+  orbitals.forEach(o=>{
+    o.angle+=o.speed;
+    const r=o.r,y3d=r*0.35;
+    const x=cx+r*Math.cos(o.angle);
+    const y=cy+y3d*Math.sin(o.angle);
+    const z=Math.sin(o.angle);
+    const alpha=0.3+z*0.5;const size=o.size*(0.7+z*0.4);
+    tCtx.beginPath();tCtx.arc(x,y,size,0,Math.PI*2);
+    tCtx.fillStyle=`rgba(0,229,255,${alpha})`;tCtx.fill();
+    if(z>0.5){tCtx.beginPath();tCtx.arc(x,y,size*3,0,Math.PI*2);tCtx.fillStyle=`rgba(0,229,255,${0.05*z})`;tCtx.fill();}
+  });
+  // Central core pulsing
+  const pulse=0.8+Math.sin(t3*0.03)*0.2;
+  const core=tCtx.createRadialGradient(cx,cy,0,cx,cy,30*pulse);
+  core.addColorStop(0,'rgba(0,229,255,0.6)');core.addColorStop(0.5,'rgba(0,229,255,0.15)');core.addColorStop(1,'transparent');
+  tCtx.fillStyle=core;tCtx.beginPath();tCtx.arc(cx,cy,30*pulse,0,Math.PI*2);tCtx.fill();
+  // Cross lines
+  tCtx.strokeStyle=`rgba(0,229,255,${0.2+Math.sin(t3*0.02)*0.1})`;tCtx.lineWidth=0.5;
+  tCtx.beginPath();tCtx.moveTo(cx-400,cy);tCtx.lineTo(cx+400,cy);tCtx.stroke();
+  tCtx.beginPath();tCtx.moveTo(cx,cy-400);tCtx.lineTo(cx,cy+400);tCtx.stroke();
+  t3++;requestAnimationFrame(draw3d);
+}draw3d();
+
+// Scroll reveal
+const revs=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.1});
+revs.forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>
