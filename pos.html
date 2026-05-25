@@ -46,73 +46,96 @@ footer{position:relative;z-index:1;padding:34px 3rem;border-top:1px solid var(--
 @media(max-width:1000px){.nav-links,.nav-cta{display:none}.hamburger{display:flex}.hero{grid-template-columns:1fr}.sim-wrap{min-height:430px}.metric-grid{grid-template-columns:1fr 1fr}.flow{grid-template-columns:1fr}}
 @media(max-width:620px){body{cursor:auto}#cursor,#cursor-ring{display:none}nav{padding:0 1.25rem}.hero,.section,.cta-band{padding-left:1.25rem;padding-right:1.25rem}.metric-grid{grid-template-columns:1fr}.sim-panel{display:none}.logo-text{font-size:.95rem}}
 
-/* SOFTVISION LOADER */
+/* -- SOFTVISION LOADER (new) -- */
 body:not(.sv-loaded){overflow:hidden;}
+
+/* Initial-load overlay */
 .sv-loader{
-  position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;
-  background:#020b18;color:#fff;transition:opacity .6s ease,visibility .6s ease;
+  position:fixed;inset:0;z-index:10000;
+  background:#020b18;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .5s ease,visibility .5s ease;
 }
 .sv-loader.hide{opacity:0;visibility:hidden;pointer-events:none;}
-.sv-loader:before{
-  content:'';position:absolute;inset:0;
-  background:
-    linear-gradient(rgba(0,229,255,.08) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,229,255,.08) 1px,transparent 1px);
-  background-size:48px 48px;opacity:.45;animation:loaderGrid 5s linear infinite;
+
+/* Orbital spinner */
+.sv-orbit-wrap{
+  position:relative;width:120px;height:120px;
 }
-.sv-loader:after{
-  content:'';position:absolute;left:0;right:0;top:0;height:4px;
-  background:linear-gradient(90deg,transparent,#00e5ff,#39ff14,#00e5ff,transparent);
-  box-shadow:0 0 24px rgba(0,229,255,.9);animation:loaderScan 1.7s ease-in-out infinite;
+.sv-orbit-core{
+  position:absolute;inset:0;margin:auto;
+  width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',monospace;font-size:.8rem;font-weight:900;color:#00e5ff;
+  background:rgba(0,229,255,.1);border-radius:50%;
+  box-shadow:0 0 22px rgba(0,229,255,.7),0 0 50px rgba(0,229,255,.2);
+  animation:svCorePulse 1.6s ease-in-out infinite;
 }
-.sv-load-box{
-  position:relative;width:min(88vw,560px);padding:2.4rem 2rem 2rem;text-align:center;
-  border:2px solid #00e5ff;background:rgba(2,11,24,.92);
-  box-shadow:0 0 0 1px rgba(0,229,255,.25),0 0 55px rgba(0,229,255,.35),inset 0 0 35px rgba(0,229,255,.08);
+.sv-orbit-ring{
+  position:absolute;inset:0;
+  border-radius:50%;
+  border:1.5px solid transparent;
+  animation:svSpin 1.2s linear infinite;
 }
-.sv-load-logo{
-  width:150px;height:150px;margin:0 auto 1.5rem;display:grid;place-items:center;
-  border:3px solid #00e5ff;background:rgba(0,229,255,.12);
-  box-shadow:0 0 35px rgba(0,229,255,.75),inset 0 0 28px rgba(0,229,255,.25);
-  font-family:'Orbitron',monospace;font-size:3rem;font-weight:900;letter-spacing:.06em;color:#fff;
-  animation:loaderPulse 1.25s ease-in-out infinite;
+.sv-orbit-ring::before{
+  content:'';
+  position:absolute;
+  top:-3px;left:50%;transform:translateX(-50%);
+  width:7px;height:7px;
+  background:#00e5ff;
+  border-radius:50%;
+  box-shadow:0 0 10px rgba(0,229,255,.9);
 }
-.sv-load-title{
-  font-family:'Orbitron',monospace;font-weight:900;font-size:clamp(1.25rem,4vw,2rem);
-  letter-spacing:.16em;text-transform:uppercase;margin-bottom:.7rem;color:#fff;
+.sv-orbit-ring:nth-child(2){inset:12px;animation-duration:1.8s;animation-direction:reverse;}
+.sv-orbit-ring:nth-child(2)::before{background:#39ff14;box-shadow:0 0 10px rgba(57,255,20,.9);}
+.sv-orbit-ring:nth-child(3){inset:26px;animation-duration:2.6s;}
+.sv-orbit-ring:nth-child(3)::before{width:5px;height:5px;background:rgba(0,229,255,.6);}
+
+/* Page-transition top bar */
+.sv-topbar{
+  position:fixed;top:0;left:0;z-index:10001;
+  height:3px;width:0;
+  background:linear-gradient(90deg,#00e5ff,#39ff14,#00e5ff);
+  box-shadow:0 0 14px rgba(0,229,255,.9);
+  transition:width .4s cubic-bezier(.4,0,.2,1),opacity .3s ease;
+  opacity:0;
+  border-radius:0 2px 2px 0;
+  pointer-events:none;
 }
-.sv-load-title span{color:#00e5ff;text-shadow:0 0 18px rgba(0,229,255,.9);}
-.sv-load-text{
-  min-height:1.4rem;color:#b8e8ff;font-size:.86rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1.25rem;
+.sv-topbar.sv-running{opacity:1;}
+
+/* Page-transition fade veil */
+.sv-veil{
+  position:fixed;inset:0;z-index:10000;
+  background:#020b18;
+  opacity:0;visibility:hidden;
+  transition:opacity .25s ease,visibility .25s ease;
+  pointer-events:none;
 }
-.sv-load-bar{
-  height:16px;border:2px solid rgba(0,229,255,.8);background:rgba(0,229,255,.08);padding:3px;overflow:hidden;
+.sv-veil.sv-flash{opacity:.55;visibility:visible;}
+
+@keyframes svCorePulse{
+  0%,100%{box-shadow:0 0 22px rgba(0,229,255,.7),0 0 50px rgba(0,229,255,.2);}
+  50%{box-shadow:0 0 30px rgba(57,255,20,.6),0 0 60px rgba(0,229,255,.25);}
 }
-.sv-load-progress{
-  display:block;height:100%;width:0;background:linear-gradient(90deg,#00e5ff,#39ff14);
-  box-shadow:0 0 18px rgba(57,255,20,.7);transition:width .18s ease;
+@keyframes svSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){
+  .sv-orbit-ring,.sv-orbit-core{animation:none!important;}
+  .sv-loader,.sv-topbar,.sv-veil{transition:none!important;}
 }
-.sv-load-percent{
-  margin-top:.75rem;font-family:'Orbitron',monospace;color:#00e5ff;font-size:.85rem;letter-spacing:.18em;
-}
-@keyframes loaderGrid{from{background-position:0 0,0 0}to{background-position:48px 48px,48px 0}}
-@keyframes loaderScan{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(100vh);opacity:1}}
-@keyframes loaderPulse{0%,100%{transform:scale(1);box-shadow:0 0 35px rgba(0,229,255,.75),inset 0 0 28px rgba(0,229,255,.25)}50%{transform:scale(1.06);box-shadow:0 0 60px rgba(57,255,20,.65),inset 0 0 34px rgba(0,229,255,.35)}}
-@media (max-width:600px){.sv-load-box{padding:2rem 1.2rem 1.6rem}.sv-load-logo{width:118px;height:118px;font-size:2.35rem}.sv-load-title{letter-spacing:.1em}}
-@media (prefers-reduced-motion:reduce){.sv-loader *,.sv-loader:before,.sv-loader:after{animation:none!important;transition:none!important;}}
 </style>
 </head>
 <body data-sim="pos">
-<div class="sv-loader" id="svLoader" aria-label="Loading SoftVision experience">
-  <div class="sv-load-box">
-    <div class="sv-load-logo">SV</div>
-    <div class="sv-load-title">Soft<span>Vision</span></div>
-    <div class="sv-load-text" id="svLoadText">Starting system</div>
-    <div class="sv-load-bar"><span class="sv-load-progress" id="svLoadProgress"></span></div>
-    <div class="sv-load-percent" id="svLoadPercent">0%</div>
+<div class="sv-loader" id="svLoader" aria-label="Loading SoftVision">
+  <div class="sv-orbit-wrap">
+    <div class="sv-orbit-ring"></div>
+    <div class="sv-orbit-ring"></div>
+    <div class="sv-orbit-ring"></div>
+    <div class="sv-orbit-core">SV</div>
   </div>
 </div>
-</div>
+<div class="sv-topbar" id="svTopbar"></div>
+<div class="sv-veil" id="svVeil"></div>
 <div id="cursor"></div><div id="cursor-ring"></div><canvas id="bg-canvas"></canvas>
 <nav>
   <a href="index.html" class="logo">
@@ -222,40 +245,41 @@ else if(kind==='contact'){for(let i=0;i<12;i++){const a=phase+i*Math.PI/6,r=2.5+
 else{for(let x=-4;x<=4;x+=2)for(let y=-3;y<=3;y+=2){const h=.4+Math.abs(Math.sin(phase+x+y))*1.4;cube(x,y,0,1,1,h,'rgba(0,229,255,.12)')}for(let i=0;i<8;i++){const p=iso(-5+i*1.4,Math.sin(phase*2+i)*2,1.8);sctx.fillStyle='rgba(57,255,20,.8)';sctx.fillRect(p.x-10,p.y-2,20,4)}}
 t++;requestAnimationFrame(drawSim)}drawSim();
 
-// SOFTVISION LOADER
+// -- SOFTVISION LOADER (new) --
 (function(){
+  // Initial page load spinner
   const loader=document.getElementById('svLoader');
-  if(!loader){document.body.classList.add('sv-loaded');return;}
-  const bar=document.getElementById('svLoadProgress');
-  const text=document.getElementById('svLoadText');
-  const percent=document.getElementById('svLoadPercent');
-  const steps=['Starting system','Loading page assets','Preparing animations','Opening dashboard'];
-  const start=performance.now();
-  const minTime=1100;
-  const tick=()=>{
-    const elapsed=performance.now()-start;
-    const value=Math.min(96,Math.floor(elapsed/minTime*100));
-    if(bar)bar.style.width=value+'%';
-    if(percent)percent.textContent=value+'%';
-    if(text)text.textContent=steps[Math.min(steps.length-1,Math.floor(value/28))];
-    if(value<96)requestAnimationFrame(tick);
+  const hide=()=>{
+    if(!loader)return;
+    loader.classList.add('hide');
+    document.body.classList.add('sv-loaded');
+    setTimeout(()=>{if(loader.parentNode)loader.remove();},520);
   };
-  requestAnimationFrame(tick);
-  const done=()=>{
-    const wait=Math.max(0,minTime-(performance.now()-start));
-    setTimeout(()=>{
-      if(bar)bar.style.width='100%';
-      if(percent)percent.textContent='100%';
-      if(text)text.textContent='Ready';
-      setTimeout(()=>{
-        loader.classList.add('hide');
-        document.body.classList.add('sv-loaded');
-        setTimeout(()=>loader.remove(),650);
-      },240);
-    },wait);
-  };
-  if(document.readyState==='complete')done();
-  else window.addEventListener('load',done,{once:true});
+  if(!loader){document.body.classList.add('sv-loaded');}
+  else if(document.readyState==='complete'){setTimeout(hide,300);}
+  else{window.addEventListener('load',()=>setTimeout(hide,300),{once:true});}
+
+  // Inter-page transition bar
+  const topbar=document.getElementById('svTopbar');
+  const veil=document.getElementById('svVeil');
+  let navTimer=null;
+  document.querySelectorAll('a[href]').forEach(a=>{
+    const href=a.getAttribute('href');
+    if(!href||href.startsWith('#')||href.startsWith('mailto')||href.startsWith('tel')||href.startsWith('http'))return;
+    a.addEventListener('click',e=>{
+      e.preventDefault();
+      const dest=a.href;
+      if(topbar){topbar.style.width='0';topbar.classList.add('sv-running');void topbar.offsetWidth;
+        topbar.style.transition='width .55s cubic-bezier(.4,0,.2,1),opacity .3s ease';
+        topbar.style.width='75%';}
+      if(veil){veil.classList.add('sv-flash');}
+      clearTimeout(navTimer);
+      navTimer=setTimeout(()=>{
+        if(topbar){topbar.style.width='100%';}
+        setTimeout(()=>{window.location.href=dest;},160);
+      },420);
+    });
+  });
 })();
 </script>
 </body>
