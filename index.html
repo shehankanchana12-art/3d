@@ -11,14 +11,34 @@
   --navy:#020b18;--blue:#0d47e8;--cyan:#00e5ff;--electric:#39ff14;
   --gold:#ffd700;--mid:#8ab4d4;--glass:rgba(0,229,255,0.07);
   --border:rgba(0,229,255,0.18);
+  --cursor-style: auto;
 }
 html{scroll-behavior:smooth;}
-body{font-family:'Exo 2',sans-serif;background:var(--navy);color:#fff;overflow-x:hidden;cursor:none;}
+body{font-family:'Exo 2',sans-serif;background:var(--navy);color:#fff;overflow-x:hidden;cursor:var(--cursor-style);}
+body.cursor-pointer{--cursor-style:pointer;}
+body.cursor-crosshair{--cursor-style:crosshair;}
+body.cursor-grab{--cursor-style:grab;}
+body.cursor-text{--cursor-style:text;}
+body.cursor-wait{--cursor-style:wait;}
+body.cursor-help{--cursor-style:help;}
+body.cursor-move{--cursor-style:move;}
+body.cursor-not-allowed{--cursor-style:not-allowed;}
+body.cursor-custom{cursor:none;}
 h1,h2,h3,h4,h5{font-family:'Orbitron',monospace;}
 
 /* CURSOR */
-#cursor{position:fixed;width:12px;height:12px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s;mix-blend-mode:difference;}
-#cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--cyan);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.18s ease;opacity:0.6;}
+#cursor{position:fixed;width:12px;height:12px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s;mix-blend-mode:difference;display:none;}
+body.cursor-custom #cursor{display:block;}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--cyan);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.18s ease;opacity:0.8;display:none;}
+body.cursor-custom #cursor-ring{display:block;}
+
+/* CURSOR SELECTOR */
+.cursor-selector{position:fixed;top:80px;right:20px;z-index:1000;background:rgba(2,11,24,0.95);border:1px solid var(--cyan);border-radius:8px;padding:15px;max-width:220px;backdrop-filter:blur(10px);}
+.cursor-selector h4{font-size:0.7rem;color:var(--cyan);letter-spacing:0.1em;margin-bottom:10px;text-transform:uppercase;}
+.cursor-options{display:flex;flex-direction:column;gap:8px;}
+.cursor-btn{padding:8px 12px;border:1px solid var(--cyan);background:transparent;color:var(--mid);font-family:'Exo 2',sans-serif;font-size:0.72rem;cursor:pointer;transition:all 0.2s;text-align:left;border-radius:3px;}
+.cursor-btn:hover{background:var(--cyan);color:var(--navy);}
+.cursor-btn.active{background:var(--cyan);color:var(--navy);font-weight:bold;}
 
 /* CANVAS */
 #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
@@ -27,7 +47,7 @@ h1,h2,h3,h4,h5{font-family:'Orbitron',monospace;}
 nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 3rem;height:70px;display:flex;align-items:center;justify-content:space-between;background:rgba(2,11,24,0.7);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
 .logo{display:flex;align-items:center;gap:0.9rem;text-decoration:none;}
 .logo-cube{width:42px;height:42px;position:relative;transform-style:preserve-3d;animation:rotateCube 8s linear infinite;}
-.logo-cube-face{position:absolute;width:100%;height:100%;border:1.5px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:900;font-size:0.9rem;background:rgba(0,229,255,0.06);}
+.logo-cube-face{position:absolute;width:100%;height:100%;border:1.5px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-weight:900;font-size:0.65rem;}
 .logo-cube-face.front{transform:translateZ(21px);}
 .logo-cube-face.back{transform:rotateY(180deg) translateZ(21px);}
 .logo-cube-face.left{transform:rotateY(-90deg) translateZ(21px);}
@@ -42,7 +62,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 3rem;height:70px;d
 .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--cyan);transition:width 0.3s;}
 .nav-links a:hover{color:var(--cyan);}
 .nav-links a:hover::after{width:100%;}
-.nav-cta{background:transparent;border:1.5px solid var(--cyan);color:var(--cyan);font-family:'Orbitron',monospace;font-weight:700;font-size:0.72rem;padding:0.55rem 1.4rem;border-radius:2px;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;position:relative;overflow:hidden;transition:color 0.3s;}
+.nav-cta{background:transparent;border:1.5px solid var(--cyan);color:var(--cyan);font-family:'Orbitron',monospace;font-weight:700;font-size:0.72rem;padding:0.55rem 1.4rem;border-radius:2px;text-decoration:none;position:relative;overflow:hidden;transition:color 0.3s;}
 .nav-cta::before{content:'';position:absolute;inset:0;background:var(--cyan);transform:translateX(-100%);transition:transform 0.3s;}
 .nav-cta:hover::before{transform:translateX(0);}
 .nav-cta:hover{color:var(--navy);}
@@ -53,13 +73,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 3rem;height:70px;d
 /* MOBILE MENU */
 .mob-menu{display:none;position:fixed;inset:70px 0 0 0;z-index:150;background:rgba(2,11,24,0.97);backdrop-filter:blur(20px);flex-direction:column;padding:2rem;gap:0;border-top:1px solid var(--border);}
 .mob-menu.open{display:flex;}
-.mob-menu a{color:var(--mid);font-family:'Orbitron',monospace;font-weight:700;font-size:0.9rem;text-decoration:none;padding:1rem 0;border-bottom:1px solid rgba(0,229,255,0.08);letter-spacing:0.08em;transition:color 0.2s,padding-left 0.2s;}
+.mob-menu a{color:var(--mid);font-family:'Orbitron',monospace;font-weight:700;font-size:0.9rem;text-decoration:none;padding:1rem 0;border-bottom:1px solid rgba(0,229,255,0.08);letter-spacing:0.08em;transition:color 0.2s;}
 .mob-menu a:hover{color:var(--cyan);padding-left:0.5rem;}
 
 /* HERO */
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;padding:100px 3rem 60px;}
 .hero-inner{max-width:1000px;width:100%;}
-.hero-glitch{font-family:'Orbitron',monospace;font-size:clamp(0.7rem,1.5vw,0.85rem);font-weight:700;letter-spacing:0.3em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;animation:fadeUp 0.6s ease both;}
+.hero-glitch{font-family:'Orbitron',monospace;font-size:clamp(0.7rem,1.5vw,0.85rem);font-weight:700;letter-spacing:0.3em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.5rem;display:flex;align-items:center;gap:0.75rem;}
 .hero-glitch::before{content:'';display:inline-block;width:40px;height:1px;background:var(--cyan);}
 .hero-glitch::after{content:'';display:inline-block;width:40px;height:1px;background:var(--cyan);}
 .hero-title{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;line-height:0.95;margin-bottom:2rem;animation:fadeUp 0.7s ease both 0.1s;}
@@ -68,9 +88,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 3rem;height:70px;d
 .hero-title .t3{display:block;font-size:0.38em;color:var(--mid);letter-spacing:0.15em;font-weight:400;margin-top:0.5rem;}
 .hero-desc{font-size:1.05rem;color:var(--mid);max-width:520px;line-height:1.8;margin-bottom:2.5rem;animation:fadeUp 0.7s ease both 0.2s;}
 .hero-btns{display:flex;gap:1.25rem;flex-wrap:wrap;animation:fadeUp 0.7s ease both 0.3s;}
-.btn-glow{background:var(--cyan);color:var(--navy);font-family:'Orbitron',monospace;font-weight:900;font-size:0.78rem;padding:0.9rem 2.2rem;border-radius:2px;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;box-shadow:0 0 30px rgba(0,229,255,0.4),0 0 60px rgba(0,229,255,0.15);transition:box-shadow 0.3s,transform 0.2s;}
+.btn-glow{background:var(--cyan);color:var(--navy);font-family:'Orbitron',monospace;font-weight:900;font-size:0.78rem;padding:0.9rem 2.2rem;border-radius:2px;text-decoration:none;letter-spacing:0.08em;transition:all 0.3s;box-shadow:0 0 32px rgba(0,229,255,0.35);}
 .btn-glow:hover{box-shadow:0 0 50px rgba(0,229,255,0.6),0 0 100px rgba(0,229,255,0.3);transform:translateY(-2px);}
-.btn-ghost{border:1.5px solid rgba(0,229,255,0.4);color:var(--cyan);font-family:'Orbitron',monospace;font-weight:700;font-size:0.78rem;padding:0.9rem 2.2rem;border-radius:2px;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:border-color 0.3s,background 0.3s;}
+.btn-ghost{border:1.5px solid rgba(0,229,255,0.4);color:var(--cyan);font-family:'Orbitron',monospace;font-weight:700;font-size:0.78rem;padding:0.9rem 2.2rem;border-radius:2px;text-decoration:none;transition:all 0.3s;}
 .btn-ghost:hover{border-color:var(--cyan);background:rgba(0,229,255,0.08);}
 .hero-stats{display:flex;gap:3rem;margin-top:4rem;animation:fadeUp 0.7s ease both 0.4s;flex-wrap:wrap;}
 .stat{border-left:2px solid var(--cyan);padding-left:1.2rem;}
@@ -86,7 +106,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 3rem;height:70px;d
 .services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.5px;background:var(--border);}
 .srv-card{background:var(--navy);padding:2rem;text-decoration:none;color:#fff;display:block;position:relative;overflow:hidden;transition:background 0.3s;}
 .srv-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,255,0.06),transparent);opacity:0;transition:opacity 0.3s;}
-.srv-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);transform:translateX(-100%);transition:transform 0.5s;}
+.srv-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);transform:translateX(-100%);transition:transform 0.6s;}
 .srv-card:hover{background:rgba(0,229,255,0.04);}
 .srv-card:hover::before{opacity:1;}
 .srv-card:hover::after{transform:translateX(100%);}
@@ -97,7 +117,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 3rem;height:70px;d
 .srv-num{position:absolute;top:1.5rem;right:1.5rem;font-family:'Orbitron',monospace;font-size:0.65rem;color:rgba(0,229,255,0.3);font-weight:700;letter-spacing:0.1em;}
 .srv-title{font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:700;margin-bottom:0.6rem;letter-spacing:0.05em;}
 .srv-desc{font-size:0.82rem;color:var(--mid);line-height:1.65;}
-.srv-arrow{display:inline-flex;align-items:center;gap:0.4rem;color:var(--cyan);font-size:0.72rem;font-weight:600;margin-top:1.25rem;letter-spacing:0.1em;text-transform:uppercase;transition:gap 0.2s;}
+.srv-arrow{display:inline-flex;align-items:center;gap:0.4rem;color:var(--cyan);font-size:0.72rem;font-weight:600;margin-top:1.25rem;letter-spacing:0.1em;text-transform:uppercase;transition:gap 0.3s;}
 .srv-card:hover .srv-arrow{gap:0.7rem;}
 
 /* WHY SECTION */
@@ -119,7 +139,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 3rem;height:70px;d
 .cta-band h2{font-size:clamp(1.8rem,4vw,3rem);font-weight:900;margin-bottom:1rem;}
 .cta-band p{color:var(--mid);margin-bottom:2.5rem;font-size:0.95rem;line-height:1.8;}
 .contact-chips{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
-.chip{display:flex;align-items:center;gap:0.6rem;border:1px solid var(--border);padding:0.7rem 1.4rem;font-size:0.82rem;color:var(--mid);text-decoration:none;transition:border-color 0.2s,color 0.2s;letter-spacing:0.05em;}
+.chip{display:flex;align-items:center;gap:0.6rem;border:1px solid var(--border);padding:0.7rem 1.4rem;font-size:0.82rem;color:var(--mid);text-decoration:none;transition:border-color 0.2s,color 0.2s;}
 .chip:hover{border-color:var(--cyan);color:var(--cyan);}
 
 /* FOOTER */
@@ -138,7 +158,7 @@ footer{position:relative;z-index:1;padding:50px 3rem 30px;border-top:1px solid v
 .reveal.visible{opacity:1;transform:translateY(0);}
 
 @media(max-width:1000px){.nav-links,.nav-cta{display:none;}.hamburger{display:flex;}.why-grid{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:600px){.hero{padding:100px 1.5rem 60px;}.services-section,.why-section,.cta-band{padding:70px 1.5rem;}.footer-grid{grid-template-columns:1fr;}.why-right{grid-template-columns:1fr;}.hero-stats{gap:1.5rem;}footer{padding:50px 1.5rem 30px;}}
+@media(max-width:600px){.hero{padding:100px 1.5rem 60px;}.services-section,.why-section,.cta-band{padding:70px 1.5rem;}.footer-grid{grid-template-columns:1fr;}.why-right{grid-template-columns:1fr;}.cursor-selector{display:none;}}
 
 /* ── SOFTVISION LOADER (new) ── */
 body:not(.sv-loaded){overflow:hidden;}
@@ -234,6 +254,21 @@ body:not(.sv-loaded){overflow:hidden;}
 <div id="cursor-ring"></div>
 <canvas id="bg-canvas"></canvas>
 
+<div class="cursor-selector">
+  <h4>Cursor Style</h4>
+  <div class="cursor-options">
+    <button class="cursor-btn active" data-cursor="custom">Custom Cyan</button>
+    <button class="cursor-btn" data-cursor="pointer">Pointer</button>
+    <button class="cursor-btn" data-cursor="crosshair">Crosshair</button>
+    <button class="cursor-btn" data-cursor="grab">Grab</button>
+    <button class="cursor-btn" data-cursor="text">Text</button>
+    <button class="cursor-btn" data-cursor="wait">Wait</button>
+    <button class="cursor-btn" data-cursor="help">Help</button>
+    <button class="cursor-btn" data-cursor="move">Move</button>
+    <button class="cursor-btn" data-cursor="not-allowed">Not Allowed</button>
+  </div>
+</div>
+
 <nav>
   <a href="index.html" class="logo">
     <div class="logo-cube">
@@ -257,7 +292,7 @@ body:not(.sv-loaded){overflow:hidden;}
   <div class="hamburger" id="ham" onclick="document.getElementById('mob').classList.toggle('open');"><span></span><span></span><span></span></div>
 </nav>
 <div class="mob-menu" id="mob">
-  <a href="index.html">⬡ Home</a><a href="about.html">⬡ About Us</a><a href="pos.html">⬡ POS Systems</a><a href="restaurant.html">⬡ Restaurant</a><a href="hotel.html">⬡ Hotel</a><a href="erp.html">⬡ ERP Systems</a><a href="service-mgmt.html">⬡ Service Mgmt</a><a href="custom-software.html">⬡ Custom Software</a><a href="tailoring.html">⬡ Tailoring</a><a href="contact.html">⬡ Contact</a>
+  <a href="index.html">⬡ Home</a><a href="about.html">⬡ About Us</a><a href="pos.html">⬡ POS Systems</a><a href="restaurant.html">⬡ Restaurant</a><a href="hotel.html">⬡ Hotel</a><a href="erp.html">⬡ ERP</a><a href="contact.html">⬡ Contact</a>
 </div>
 
 <section class="hero">
@@ -268,7 +303,7 @@ body:not(.sv-loaded){overflow:hidden;}
       <span class="t2">Technology</span>
       <span class="t3">SoftVision IT Group — Regional Branch</span>
     </h1>
-    <p class="hero-desc">Bringing cloud-grade software solutions directly to Uva &amp; Eastern province businesses. POS, ERP, hotel &amp; restaurant management — on your doorstep.</p>
+    <p class="hero-desc">Bringing cloud-grade software solutions directly to Uva & Eastern province businesses. POS, ERP, hotel & restaurant management — on your doorstep.</p>
     <div class="hero-btns">
       <a href="#services" class="btn-glow">Explore Solutions</a>
       <a href="contact.html" class="btn-ghost">Talk to an Expert</a>
@@ -288,14 +323,14 @@ body:not(.sv-loaded){overflow:hidden;}
     <h2 class="sec-title reveal">Complete Business<br>Software Solutions</h2>
     <p class="sec-desc reveal">From retail POS to full ERP deployments — installed, trained, and supported locally at MCC Mahiyanganaya.</p>
     <div class="services-grid">
-      <a href="pos.html" class="srv-card reveal"><div class="srv-num">01</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">🖥</div></div><div class="srv-title">POS Systems</div><div class="srv-desc">Complete point-of-sale for retail shops, supermarkets, pharmacies. Real-time inventory and barcode support.</div><div class="srv-arrow">Learn more →</div></a>
-      <a href="restaurant.html" class="srv-card reveal"><div class="srv-num">02</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">🍽</div></div><div class="srv-title">Restaurant Mgmt</div><div class="srv-desc">Table management, KOT printing, menu management, billing and digital receipts for all restaurant sizes.</div><div class="srv-arrow">Learn more →</div></a>
-      <a href="hotel.html" class="srv-card reveal"><div class="srv-num">03</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">🏨</div></div><div class="srv-title">Hotel Management</div><div class="srv-desc">Front desk, room reservations, housekeeping, billing and guest management for hotels of all sizes.</div><div class="srv-arrow">Learn more →</div></a>
-      <a href="erp.html" class="srv-card reveal"><div class="srv-num">04</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">📊</div></div><div class="srv-title">ERP Systems</div><div class="srv-desc">Cloud BUSY ERP covering accounting, inventory, payroll, and tax compliance for retail and industrial sectors.</div><div class="srv-arrow">Learn more →</div></a>
-      <a href="service-mgmt.html" class="srv-card reveal"><div class="srv-num">05</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">🔧</div></div><div class="srv-title">Service Management</div><div class="srv-desc">Job card tracking, technician dispatch, warranty management for repair and service businesses.</div><div class="srv-arrow">Learn more →</div></a>
-      <a href="custom-software.html" class="srv-card reveal"><div class="srv-num">06</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">💻</div></div><div class="srv-title">Custom Software</div><div class="srv-desc">Tailor-made web and mobile applications built on React, Node.js, Python and Java for your unique workflow.</div><div class="srv-arrow">Learn more →</div></a>
-      <a href="tailoring.html" class="srv-card reveal"><div class="srv-num">07</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">✂️</div></div><div class="srv-title">Tailoring System</div><div class="srv-desc">Order tracking, customer measurements, delivery scheduling and billing for tailoring and garment businesses.</div><div class="srv-arrow">Learn more →</div></a>
-      <a href="about.html" class="srv-card reveal"><div class="srv-num">08</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">🤝</div></div><div class="srv-title">IT Consulting</div><div class="srv-desc">On-site setup, staff training workshops, ongoing technical support and cloud migration planning locally.</div><div class="srv-arrow">Learn more →</div></a>
+      <a href="pos.html" class="srv-card reveal"><div class="srv-num">01</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">🖥</div></div><div class="srv-title">POS Systems</div><div class="srv-desc">Barcode-ready retail billing, inventory sync, offline mode, and accounting bridges.</div><div class="srv-arrow">Learn More →</div></a>
+      <a href="restaurant.html" class="srv-card reveal"><div class="srv-num">02</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">🍽</div></div><div class="srv-title">Restaurant</div><div class="srv-desc">Table service, kitchen display, modifiers, delivery orders, outlet reporting.</div><div class="srv-arrow">Learn More →</div></a>
+      <a href="hotel.html" class="srv-card reveal"><div class="srv-num">03</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">🏨</div></div><div class="srv-title">Hotel PMS</div><div class="srv-desc">Reservations, front desk, housekeeping, guest folios, multi-property support.</div><div class="srv-arrow">Learn More →</div></a>
+      <a href="erp.html" class="srv-card reveal"><div class="srv-num">04</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">📊</div></div><div class="srv-title">ERP Systems</div><div class="srv-desc">Finance, inventory, procurement, payroll, dashboards, 200+ integrations.</div><div class="srv-arrow">Learn More →</div></a>
+      <a href="service-mgmt.html" class="srv-card reveal"><div class="srv-num">05</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">🔧</div></div><div class="srv-title">Service Management</div><div class="srv-desc">Ticket dispatch, warranty tracking, technician scheduling, SLA monitoring.</div><div class="srv-arrow">Learn More →</div></a>
+      <a href="custom-software.html" class="srv-card reveal"><div class="srv-num">06</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">💻</div></div><div class="srv-title">Custom Software</div><div class="srv-desc">Discovery, UX planning, secure engineering, integrations, mobile apps.</div><div class="srv-arrow">Learn More →</div></a>
+      <a href="tailoring.html" class="srv-card reveal"><div class="srv-num">07</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">✂️</div></div><div class="srv-title">Tailoring System</div><div class="srv-desc">Measurements, order tracking, delivery reminders, POS integration.</div><div class="srv-arrow">Learn More →</div></a>
+      <a href="about.html" class="srv-card reveal"><div class="srv-num">08</div><div class="srv-icon-wrap"><div class="srv-icon-bg"></div><div class="srv-icon">🤝</div></div><div class="srv-title">Learn More</div><div class="srv-desc">About SoftVision's 15+ years of enterprise software excellence.</div><div class="srv-arrow">Learn More →</div></a>
     </div>
   </div>
 </section>
@@ -305,13 +340,13 @@ body:not(.sv-loaded){overflow:hidden;}
     <div class="why-left reveal">
       <div class="sec-eyebrow">Why Choose Us</div>
       <h2 class="sec-title">Enterprise Tech.<br>Local Support.</h2>
-      <p class="sec-desc" style="margin-bottom:2rem;">For the first time, businesses in the Uva and Eastern province have direct, on-ground access to the same technology powering enterprise clients in Colombo.</p>
+      <p class="sec-desc" style="margin-bottom:2rem;">For the first time, businesses in the Uva and Eastern province have direct, on-ground access to the same technology powering enterprise clients across Sri Lanka.</p>
       <a href="contact.html" class="btn-glow" style="display:inline-block;">Visit Us at MCC →</a>
     </div>
     <div class="why-right reveal">
-      <div class="why-feat"><div class="feat-num">01</div><div class="feat-title">Local Branch at MCC</div><div class="feat-text">Walk-in support, live demos, and on-site installation — no more waiting on Colombo teams.</div></div>
-      <div class="why-feat"><div class="feat-num">02</div><div class="feat-title">Same-Day Support</div><div class="feat-text">Our local team responds immediately to issues, reducing business downtime to near zero.</div></div>
-      <div class="why-feat"><div class="feat-num">03</div><div class="feat-title">Training in Sinhala</div><div class="feat-text">Staff training conducted locally in your language, making software adoption easy and fast.</div></div>
+      <div class="why-feat"><div class="feat-num">01</div><div class="feat-title">Local Branch at MCC</div><div class="feat-text">Walk-in support, live demos, and on-site installation — no more travel to Colombo.</div></div>
+      <div class="why-feat"><div class="feat-num">02</div><div class="feat-title">Same-Day Support</div><div class="feat-text">Our local team responds immediately to issues, reducing business downtime.</div></div>
+      <div class="why-feat"><div class="feat-num">03</div><div class="feat-title">Training in Sinhala</div><div class="feat-text">Staff training conducted locally in your language, making software adoption smooth.</div></div>
       <div class="why-feat"><div class="feat-num">04</div><div class="feat-title">Cloud Security</div><div class="feat-text">All systems backed by 99.99% uptime SLA with encrypted cloud data protection.</div></div>
     </div>
   </div>
@@ -336,14 +371,35 @@ body:not(.sv-loaded){overflow:hidden;}
       <div class="logo-text" style="font-family:'Orbitron',monospace;font-weight:900;font-size:1rem;">Soft<span style="color:var(--cyan)">Vision</span> IT Group</div>
       <p>Delivering enterprise-grade software to businesses across Sri Lanka. Now locally available at MCC Mahiyanganaya.</p>
     </div>
-    <div class="footer-col"><h4>Solutions</h4><ul><li><a href="pos.html">POS Systems</a></li><li><a href="restaurant.html">Restaurant</a></li><li><a href="hotel.html">Hotel Mgmt</a></li><li><a href="erp.html">ERP Systems</a></li></ul></div>
+    <div class="footer-col"><h4>Solutions</h4><ul><li><a href="pos.html">POS Systems</a></li><li><a href="restaurant.html">Restaurant</a></li><li><a href="hotel.html">Hotel Mgmt</a></li><li><a href="erp.html">ERP</a></li></ul></div>
     <div class="footer-col"><h4>More</h4><ul><li><a href="service-mgmt.html">Service Mgmt</a></li><li><a href="custom-software.html">Custom Software</a></li><li><a href="tailoring.html">Tailoring</a></li><li><a href="about.html">About Us</a></li></ul></div>
-    <div class="footer-col"><h4>Contact</h4><ul><li><a href="tel:+94704449091">+94 70 444 9091</a></li><li><a href="tel:+94114288100">+94 11 428 8100</a></li><li><a href="mailto:info@softvision.lk">info@softvision.lk</a></li><li><a href="mailto:support@busy.lk">support@busy.lk</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul><li><a href="tel:+94704449091">+94 70 444 9091</a></li><li><a href="tel:+94114288100">+94 11 428 8100</a></li><li><a href="mailto:info@softvision.lk">info@softvision.lk</a></li><li><a href="contact.html">MCC Branch</a></li></ul></div>
   </div>
   <div class="footer-bottom"><span>© 2025 SoftVision IT Group · MCC Mahiyanganaya Branch</span><span>288/90 Baseline Road, Colombo 09 · HQ</span></div>
 </footer>
 
 <script>
+// Cursor selector
+document.querySelectorAll('.cursor-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const cursorStyle = btn.dataset.cursor;
+    document.body.className = '';
+    if (cursorStyle !== 'custom') {
+      document.body.classList.add('cursor-' + cursorStyle);
+    } else {
+      document.body.classList.add('cursor-custom');
+    }
+    document.querySelectorAll('.cursor-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    localStorage.setItem('cursorStyle', cursorStyle);
+  });
+});
+
+// Load saved cursor style
+const savedStyle = localStorage.getItem('cursorStyle') || 'custom';
+const btn = document.querySelector(`[data-cursor="${savedStyle}"]`);
+if (btn) btn.click();
+
 // Custom cursor
 const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
 document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},80);});
@@ -360,11 +416,9 @@ let mouse={x:-1000,y:-1000};
 document.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
 function draw(){
   ctx.clearRect(0,0,W,H);
-  // Background gradient
   const bg=ctx.createRadialGradient(W*0.7,H*0.3,0,W*0.7,H*0.3,W*0.8);
   bg.addColorStop(0,'rgba(13,71,232,0.06)');bg.addColorStop(1,'transparent');
   ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
-  // Dots
   dots.forEach(d=>{
     d.x+=d.vx;d.y+=d.vy;
     if(d.x<0)d.x=W;if(d.x>W)d.x=0;if(d.y<0)d.y=H;if(d.y>H)d.y=0;
@@ -373,12 +427,10 @@ function draw(){
     const speed=Math.sqrt(d.vx*d.vx+d.vy*d.vy);if(speed>1){d.vx/=speed;d.vy/=speed;}
     ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,Math.PI*2);ctx.fillStyle='rgba(0,229,255,0.5)';ctx.fill();
   });
-  // Lines
   for(let i=0;i<DOTS;i++)for(let j=i+1;j<DOTS;j++){
     const dx=dots[i].x-dots[j].x,dy=dots[i].y-dots[j].y,dist=Math.sqrt(dx*dx+dy*dy);
     if(dist<130){ctx.beginPath();ctx.moveTo(dots[i].x,dots[i].y);ctx.lineTo(dots[j].x,dots[j].y);ctx.strokeStyle=`rgba(0,229,255,${0.12*(1-dist/130)})`;ctx.lineWidth=0.5;ctx.stroke();}
   }
-  // Grid lines
   ctx.strokeStyle='rgba(0,229,255,0.03)';ctx.lineWidth=1;
   for(let x=0;x<W;x+=80){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
   for(let y=0;y<H;y+=80){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
@@ -389,7 +441,12 @@ draw();
 // Counter animation
 const counters=document.querySelectorAll('[data-count]');
 const counterObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){const el=e.target,target=+el.dataset.count,suffix=el.innerHTML.includes('+')?' +':(el.innerHTML.includes('%')?' %':'');let count=0;const inc=target/60;const t=setInterval(()=>{count+=inc;if(count>=target){el.textContent=target+(target>=100?'+':'');clearInterval(t);}else el.textContent=Math.floor(count)+'';},16);counterObs.unobserve(el);}});
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const el=e.target,target=+el.dataset.count,suffix=el.innerHTML.includes('+')?' +':(el.innerHTML.includes('%')?' %':'');let count=0;const inc=target/60;
+      const interval=setInterval(()=>{if(count>=target){clearInterval(interval);}else{count+=inc;el.innerHTML=Math.floor(count)+suffix;}},30);
+    }
+  });
 },{threshold:0.5});
 counters.forEach(c=>counterObs.observe(c));
 
@@ -400,7 +457,6 @@ revs.forEach((r,i)=>{r.style.transitionDelay=(i%4)*0.08+'s';revObs.observe(r);})
 
 // ── SOFTVISION LOADER (new) ──
 (function(){
-  // Initial page load spinner
   const loader=document.getElementById('svLoader');
   const hide=()=>{
     if(!loader)return;
@@ -412,7 +468,6 @@ revs.forEach((r,i)=>{r.style.transitionDelay=(i%4)*0.08+'s';revObs.observe(r);})
   else if(document.readyState==='complete'){setTimeout(hide,300);}
   else{window.addEventListener('load',()=>setTimeout(hide,300),{once:true});}
 
-  // Inter-page transition bar
   const topbar=document.getElementById('svTopbar');
   const veil=document.getElementById('svVeil');
   let navTimer=null;
@@ -422,14 +477,13 @@ revs.forEach((r,i)=>{r.style.transitionDelay=(i%4)*0.08+'s';revObs.observe(r);})
     a.addEventListener('click',e=>{
       e.preventDefault();
       const dest=a.href;
-      // Start bar
       if(topbar){topbar.style.width='0';topbar.classList.add('sv-running');void topbar.offsetWidth;
         topbar.style.transition='width .55s cubic-bezier(.4,0,.2,1),opacity .3s ease';
-        topbar.style.width='75%';}
+        topbar.style.width='75%;'}
       if(veil){veil.classList.add('sv-flash');}
       clearTimeout(navTimer);
       navTimer=setTimeout(()=>{
-        if(topbar){topbar.style.width='100%';}
+        if(topbar){topbar.style.width='100%;'}
         setTimeout(()=>{window.location.href=dest;},160);
       },420);
     });
